@@ -1,0 +1,25 @@
+---
+import CalculatorLayout from '../../components/CalculatorLayout.astro';
+import { getCalculator } from '../../data/calculators';
+const calculator = getCalculator('unit-converter');
+---
+
+<CalculatorLayout calculator={calculator}
+  formula="길이·무게·넓이는 기준 단위로 바꾼 뒤 목표 단위의 환산값으로 나누고, 온도는 섭씨를 중간 기준으로 변환합니다."
+  example="1평은 약 3.305785㎡, 1인치는 정확히 2.54cm로 변환합니다."
+  caveats={["표시는 소수 여섯째 자리까지 반올림합니다.", "상거래·측량·과학 계산에는 요구되는 정밀도와 법정단위를 별도로 확인하세요.", "부피·속도·데이터 단위는 현재 버전에 포함하지 않았습니다."]} version="1.0.0">
+  <section slot="form" class="calculator-panel"><h2>변환할 단위 입력</h2><form id="unit-form" novalidate><div class="field-grid"><div class="field full"><label for="unit-category">종류</label><select id="unit-category"><option value="length">길이</option><option value="mass">무게</option><option value="area">넓이</option><option value="temperature">온도</option></select></div><div class="field full"><label for="unit-value">변환할 값</label><input id="unit-value" type="number" step="any" value="1" required /></div><div class="field"><label for="unit-from">현재 단위</label><select id="unit-from"></select></div><div class="field"><label for="unit-to">바꿀 단위</label><select id="unit-to"></select></div></div><div class="form-actions"><button class="button" type="submit">변환하기</button><button class="button secondary" type="button" data-swap>단위 바꾸기</button></div><p id="unit-error" class="error-message" role="alert"></p></form></section>
+  <section slot="result" class="result-panel"><h2>변환 결과</h2><div id="unit-empty" class="result-empty">종류와 단위를 고르면 변환값을 보여드려요.</div><div id="unit-content" class="result-content" hidden aria-live="polite"><div class="result-primary"><span class="label">변환된 값</span><strong id="unit-result" data-testid="unit-result"></strong></div><p id="unit-explanation" class="notice"></p></div></section>
+</CalculatorLayout>
+
+<script>
+  import { convertUnit, type UnitCategory } from '../../lib/calculators/unit';
+  import { inputNumber, inputSelect, number, setText, showError, showResult } from '../../lib/browser';
+  const units: Record<UnitCategory,{value:string;label:string}[]>={length:[{value:'mm',label:'밀리미터(mm)'},{value:'cm',label:'센티미터(cm)'},{value:'m',label:'미터(m)'},{value:'km',label:'킬로미터(km)'},{value:'inch',label:'인치(in)'},{value:'ft',label:'피트(ft)'}],mass:[{value:'g',label:'그램(g)'},{value:'kg',label:'킬로그램(kg)'},{value:'lb',label:'파운드(lb)'}],area:[{value:'m2',label:'제곱미터(㎡)'},{value:'pyeong',label:'평'},{value:'km2',label:'제곱킬로미터(㎢)'},{value:'ft2',label:'제곱피트(ft²)'}],temperature:[{value:'c',label:'섭씨(℃)'},{value:'f',label:'화씨(℉)'},{value:'k',label:'켈빈(K)'}]};
+  const category=document.querySelector<HTMLSelectElement>('#unit-category');const from=document.querySelector<HTMLSelectElement>('#unit-from');const to=document.querySelector<HTMLSelectElement>('#unit-to');
+  function fill(){if(!category||!from||!to)return;const options=units[category.value as UnitCategory];from.innerHTML='';to.innerHTML='';options.forEach((unit,index)=>{const a=new Option(unit.label,unit.value,index===0,index===0);const b=new Option(unit.label,unit.value,index===1,index===1);from.add(a);to.add(b);});}
+  category?.addEventListener('change',fill);fill();
+  document.querySelector<HTMLButtonElement>('[data-swap]')?.addEventListener('click',()=>{if(!from||!to)return;const old=from.value;from.value=to.value;to.value=old;});
+  document.querySelector<HTMLFormElement>('#unit-form')?.addEventListener('submit',(event)=>{event.preventDefault();try{const value=inputNumber('unit-value','변환할 값');const fromValue=inputSelect('unit-from');const toValue=inputSelect('unit-to');const result=convertUnit(inputSelect('unit-category') as UnitCategory,value,fromValue,toValue);const fromLabel=from?.selectedOptions[0]?.textContent??fromValue;const toLabel=to?.selectedOptions[0]?.textContent??toValue;setText('unit-result',number.format(result));setText('unit-explanation',`${number.format(value)} ${fromLabel} = ${number.format(result)} ${toLabel}`);showResult('unit-error','unit-empty','unit-content');}catch(error){showError('unit-error',error);}});
+</script>
+

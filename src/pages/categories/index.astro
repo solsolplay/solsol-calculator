@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { categories } from '../../data/calculators';
+---
+<BaseLayout title="계산기 카테고리" description="돈과 투자, 날짜와 시간, 건강과 생활, 재미와 확률 주제별로 솔솔계산소 계산기를 찾아보세요.">
+  <header class="page-hero container"><p class="eyebrow">주제부터 골라요</p><h1>계산기 카테고리</h1><p class="lead">원하는 계산의 종류를 선택하면 관련 계산기를 모아서 보여드려요.</p></header>
+  <section class="container section category-index">
+    {categories.map((category) => <a class="content-card" href={category.path}><span aria-hidden="true">{category.icon}</span><div><h2>{category.name}</h2><p>{category.description}</p></div><b aria-hidden="true">→</b></a>)}
+  </section>
+</BaseLayout>
+<style>
+  .category-index { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; padding-top: 8px; }
+  .category-index a { display: grid; grid-template-columns: 58px 1fr auto; gap: 18px; align-items: center; color: var(--text); text-decoration: none; }
+  .category-index span { font-size: 2.2rem; } .category-index h2 { margin-bottom: 5px; font-size: 1.4rem; } .category-index p { margin-bottom: 0; color: var(--text-soft); } .category-index b { color: var(--primary); font-size: 1.5rem; }
+  @media(max-width:650px){.category-index{grid-template-columns:1fr}.category-index a{grid-template-columns:48px 1fr auto}}
+</style>
+

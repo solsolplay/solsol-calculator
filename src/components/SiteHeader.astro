@@ -1,0 +1,194 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+type Props = { currentPath: string };
+const { currentPath } = Astro.props;
+const nav = [
+  { name: '전체 계산기', path: '/calculators/' },
+  { name: '돈', path: '/categories/money/' },
+  { name: '날짜', path: '/categories/date-time/' },
+  { name: '건강·생활', path: '/categories/health-life/' },
+  { name: '재미', path: '/categories/fun/' },
+];
+const active = (path: string) => currentPath === path || currentPath.startsWith(path);
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="솔솔계산소 홈">
+      <span class="brand-mark" aria-hidden="true"><b>＋</b><b>−</b><b>×</b><b>÷</b></span>
+      <span>솔솔계산소</span>
+    </a>
+    <nav class="desktop-nav" aria-label="주요 메뉴">
+      {nav.map((item) => (
+        <a href={item.path} aria-current={active(item.path) ? 'page' : undefined}>{item.name}</a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <a class="search-link" href="/calculators/#calculator-search" aria-label="계산기 검색">⌕</a>
+      <ThemeToggle />
+      <details class="mobile-menu">
+        <summary aria-label="메뉴 열기"><span></span><span></span><span></span></summary>
+        <nav aria-label="모바일 메뉴">
+          {nav.map((item) => <a href={item.path}>{item.name}</a>)}
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    z-index: 100;
+    top: 0;
+    min-height: var(--header-height);
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter: blur(16px);
+  }
+
+  .header-inner {
+    display: flex;
+    min-height: var(--header-height);
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    font-size: 1.18rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+  }
+
+  .brand-mark b {
+    display: grid;
+    place-items: center;
+    border-radius: 4px;
+    color: white;
+    background: var(--primary);
+    font-size: 0.66rem;
+    line-height: 1;
+  }
+
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 2.2vw, 28px);
+  }
+
+  .desktop-nav a {
+    position: relative;
+    padding-block: 10px;
+    color: var(--text-soft);
+    font-size: 0.95rem;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .desktop-nav a:hover,
+  .desktop-nav a[aria-current='page'] {
+    color: var(--primary-strong);
+  }
+
+  .desktop-nav a[aria-current='page']::after {
+    position: absolute;
+    right: 0;
+    bottom: 3px;
+    left: 0;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--primary);
+    content: '';
+  }
+
+  .header-actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .search-link {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    font-size: 1.65rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: relative;
+  }
+
+  .mobile-menu summary {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    padding: 11px;
+    place-content: center;
+    gap: 5px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .mobile-menu summary::-webkit-details-marker { display: none; }
+  .mobile-menu summary span { width: 20px; height: 2px; border-radius: 2px; background: var(--text); }
+  .mobile-menu nav {
+    position: absolute;
+    top: 54px;
+    right: 0;
+    width: min(260px, calc(100vw - 24px));
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+  }
+
+  .mobile-menu nav a {
+    display: block;
+    padding: 11px 12px;
+    border-radius: 10px;
+    color: var(--text);
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .mobile-menu nav a:hover { background: var(--bg-soft); }
+
+  @media (max-width: 900px) {
+    .desktop-nav { display: none; }
+    .mobile-menu { display: block; }
+  }
+
+  @media (max-width: 420px) {
+    .search-link { display: none; }
+  }
+</style>

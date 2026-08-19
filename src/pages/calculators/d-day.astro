@@ -1,0 +1,21 @@
+---
+import CalculatorLayout from '../../components/CalculatorLayout.astro';
+import { getCalculator } from '../../data/calculators';
+const calculator = getCalculator('d-day');
+---
+
+<CalculatorLayout calculator={calculator}
+  formula="목표일의 달력 날짜값에서 기준일을 빼 남은 일수를 구합니다. 미래는 D−, 같은 날은 D-day, 과거는 D+로 표시합니다."
+  example="기준일이 8월 20일이고 목표일이 8월 27일이면 7일 남아 D-7입니다."
+  caveats={["시간과 시각은 제외하고 날짜만 계산합니다.", "행사에서 오늘을 1일로 세는 별도 규칙은 결과에 1을 더해야 할 수 있습니다.", "해외 시차가 중요한 일정은 현지 날짜를 기준으로 입력하세요."]} version="1.0.0">
+  <section slot="form" class="calculator-panel"><h2>기준일과 목표일 입력</h2><form id="dday-form" novalidate><div class="field-grid"><div class="field"><label for="dday-base">기준일</label><input id="dday-base" type="date" required /></div><div class="field"><label for="dday-target">목표일</label><input id="dday-target" type="date" required /></div></div><div class="form-actions"><button class="button" type="submit">계산하기</button><button class="button secondary" type="reset">초기화</button></div><p id="dday-error" class="error-message" role="alert"></p></form></section>
+  <section slot="result" class="result-panel"><h2>계산 결과</h2><div id="dday-empty" class="result-empty">목표일을 선택하면 D-day를 보여드려요.</div><div id="dday-content" class="result-content" hidden aria-live="polite"><div class="result-primary"><span class="label">목표일까지</span><strong id="dday-result" data-testid="dday-result"></strong></div><dl class="result-list"><div><dt>날짜 차이</dt><dd id="dday-days"></dd></div><div><dt>상태</dt><dd id="dday-state"></dd></div></dl></div></section>
+</CalculatorLayout>
+
+<script>
+  import { calculateDday } from '../../lib/calculators/date';
+  import { inputDate, localTodayInput, number, setText, showError, showResult } from '../../lib/browser';
+  const base=document.querySelector<HTMLInputElement>('#dday-base');const target=document.querySelector<HTMLInputElement>('#dday-target');const today=localTodayInput();if(base)base.value=today;if(target){const next=new Date(`${today}T00:00:00`);next.setDate(next.getDate()+30);target.value=new Date(next.getTime()-next.getTimezoneOffset()*60000).toISOString().slice(0,10);}
+  document.querySelector<HTMLFormElement>('#dday-form')?.addEventListener('submit',(event)=>{event.preventDefault();try{const r=calculateDday(inputDate('dday-base','기준일'),inputDate('dday-target','목표일'));setText('dday-result',r.label);setText('dday-days',`${number.format(Math.abs(r.difference))}일`);setText('dday-state',r.difference>0?'다가오는 일정':r.difference<0?'지난 일정':'오늘');showResult('dday-error','dday-empty','dday-content');}catch(error){showError('dday-error',error);}});
+</script>
+

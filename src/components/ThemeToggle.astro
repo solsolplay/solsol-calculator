@@ -1,0 +1,65 @@
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="밤 모드로 전환" aria-pressed="false">
+  <span class="theme-toggle__sun" aria-hidden="true">☀️</span>
+  <span class="theme-toggle__moon" aria-hidden="true">🌙</span>
+  <span class="visually-hidden" data-theme-label>테마 전환</span>
+</button>
+
+<script>
+  function syncThemeButton(button: HTMLButtonElement) {
+    const night = document.documentElement.dataset.theme === 'night';
+    button.setAttribute('aria-pressed', String(night));
+    button.setAttribute('aria-label', night ? '낮 모드로 전환' : '밤 모드로 전환');
+    const label = button.querySelector<HTMLElement>('[data-theme-label]');
+    if (label) label.textContent = night ? '현재 밤 모드' : '현재 낮 모드';
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+    syncThemeButton(button);
+    button.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'night' ? 'day' : 'night';
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem('solsol-theme', next); } catch { /* 저장 불가 시 현재 화면만 변경 */ }
+      syncThemeButton(button);
+    });
+  });
+</script>
+
+<style>
+  .theme-toggle {
+    position: relative;
+    display: grid;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    overflow: hidden;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text);
+    background: var(--surface);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .theme-toggle span[aria-hidden='true'] {
+    position: absolute;
+    font-size: 1.2rem;
+    transition: transform 180ms ease, opacity 180ms ease;
+  }
+
+  .theme-toggle__moon {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  :global(html[data-theme='night']) .theme-toggle__sun {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+
+  :global(html[data-theme='night']) .theme-toggle__moon {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+

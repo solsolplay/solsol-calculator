@@ -1,0 +1,40 @@
+---
+type Source = { label: string; url: string };
+type Props = {
+  formula: string;
+  example: string;
+  caveats: string[];
+  sources?: Source[];
+  version?: string;
+  reviewedAt?: string;
+};
+const { formula, example, caveats, sources = [], version = '1.0.0', reviewedAt = '2026-08-20' } = Astro.props;
+---
+
+<section class="evidence-section" aria-labelledby="evidence-title">
+  <h2 id="evidence-title">결과를 믿을 수 있도록 확인해 보세요</h2>
+  <div class="evidence-grid">
+    <article class="evidence-card">
+      <h3>무엇을 계산하나요?</h3>
+      <p>{formula}</p>
+    </article>
+    <article class="evidence-card">
+      <h3>간단한 예시</h3>
+      <p>{example}</p>
+    </article>
+    <article class="evidence-card">
+      <h3>달라질 수 있는 조건</h3>
+      <ul>{caveats.map((item) => <li>{item}</li>)}</ul>
+    </article>
+    <article class="evidence-card">
+      <h3>근거와 검토 정보</h3>
+      {sources.length > 0 ? (
+        <ul class="source-list">
+          {sources.map((source) => <li><a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}<span class="visually-hidden"> 새 창</span></a></li>)}
+        </ul>
+      ) : <p>수학 공식과 입력 조건을 기준으로 계산합니다.</p>}
+      <p class="muted">규칙 버전 {version} · 최종 검토 {reviewedAt}</p>
+    </article>
+  </div>
+</section>
+

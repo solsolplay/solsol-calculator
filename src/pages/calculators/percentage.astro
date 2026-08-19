@@ -1,0 +1,27 @@
+---
+import CalculatorLayout from '../../components/CalculatorLayout.astro';
+import { getCalculator } from '../../data/calculators';
+const calculator = getCalculator('percentage');
+---
+
+<CalculatorLayout calculator={calculator}
+  formula="비율은 일부 값÷전체 값×100, 증감률은 (새 값−이전 값)÷이전 값의 절댓값×100으로 계산합니다."
+  example="전체 200 중 일부 50은 25%이고, 100에서 120으로 바뀌면 20% 증가입니다."
+  caveats={["나누는 기준값이 0이면 비율을 정할 수 없습니다.", "음수에서 양수로 바뀌는 경우에는 숫자 의미를 함께 해석해야 합니다.", "표시는 소수 둘째 자리에서 반올림합니다."]} version="1.0.0">
+  <section slot="form" class="calculator-panel"><h2>계산 방식과 값 입력</h2><form id="percentage-form" novalidate><div class="field-grid">
+    <div class="field full"><label for="percentage-mode">계산 방식</label><select id="percentage-mode"><option value="ratio">전체 중 일부는 몇 %?</option><option value="change">이전 값에서 몇 % 변했나?</option></select></div>
+    <div class="field"><label id="percentage-a-label" for="percentage-a">전체 값</label><input id="percentage-a" type="number" step="any" value="200" required /></div>
+    <div class="field"><label id="percentage-b-label" for="percentage-b">일부 값</label><input id="percentage-b" type="number" step="any" value="50" required /></div>
+  </div><div class="form-actions"><button class="button" type="submit">계산하기</button><button class="button secondary" type="reset">초기화</button></div><p id="percentage-error" class="error-message" role="alert"></p></form></section>
+  <section slot="result" class="result-panel"><h2>계산 결과</h2><div id="percentage-empty" class="result-empty">계산 방식과 두 값을 입력하면 비율을 보여드려요.</div><div id="percentage-content" class="result-content" hidden aria-live="polite"><div class="result-primary"><span class="label" id="percentage-result-label">계산한 비율</span><strong id="percentage-result" data-testid="percentage-result"></strong></div><p id="percentage-explanation" class="notice"></p></div></section>
+</CalculatorLayout>
+
+<script>
+  import { calculateChange, calculateRatio } from '../../lib/calculators/percentage';
+  import { inputNumber, inputSelect, number, setText, showError, showResult } from '../../lib/browser';
+  const mode=document.querySelector<HTMLSelectElement>('#percentage-mode');
+  function syncLabels(){const change=mode?.value==='change';setText('percentage-a-label',change?'이전 값':'전체 값');setText('percentage-b-label',change?'새 값':'일부 값');}
+  mode?.addEventListener('change',syncLabels);syncLabels();
+  document.querySelector<HTMLFormElement>('#percentage-form')?.addEventListener('submit',(event)=>{event.preventDefault();try{const a=inputNumber('percentage-a',mode?.value==='change'?'이전 값':'전체 값');const b=inputNumber('percentage-b',mode?.value==='change'?'새 값':'일부 값');const change=inputSelect('percentage-mode')==='change';const value=change?calculateChange(a,b):calculateRatio(b,a);setText('percentage-result',`${number.format(value)}%`);setText('percentage-result-label',change?'증감률':'전체 중 일부의 비율');setText('percentage-explanation',change?(value>0?`${number.format(value)}% 증가했습니다.`:value<0?`${number.format(Math.abs(value))}% 감소했습니다.`:'변화가 없습니다.'):`${number.format(b)}은(는) ${number.format(a)}의 ${number.format(value)}%입니다.`);showResult('percentage-error','percentage-empty','percentage-content');}catch(error){showError('percentage-error',error);}});
+</script>
+

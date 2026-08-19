@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CalculatorCard from '../../components/CalculatorCard.astro';
+import { categories, publicCalculators } from '../../data/calculators';
+---
+
+<BaseLayout title="전체 계산기" description="솔솔계산소의 나이·배당금·로또·대출·BMI·날짜·퍼센트 등 무료 계산기 12개를 검색하고 골라보세요.">
+  <header class="page-hero container">
+    <p class="eyebrow">한곳에서 빠르게 찾아요</p>
+    <h1>전체 계산기</h1>
+    <p class="lead">이름이나 하고 싶은 일을 입력하면 맞는 계산기만 바로 보여드려요.</p>
+  </header>
+  <section class="container calculators-section">
+    <div id="calculator-search" class="search-panel">
+      <label for="calculator-filter">계산기 검색</label>
+      <div class="search-input"><span aria-hidden="true">⌕</span><input id="calculator-filter" type="search" placeholder="예: 배당, 날짜, 할인" autocomplete="off" /></div>
+      <div class="filter-buttons" role="group" aria-label="카테고리 선택">
+        <button type="button" class="active" data-category="all" aria-pressed="true">전체</button>
+        {categories.map((category) => <button type="button" data-category={category.id} aria-pressed="false">{category.name}</button>)}
+      </div>
+    </div>
+    <p class="result-count" aria-live="polite"><strong data-result-count>{publicCalculators.length}</strong>개의 계산기가 있어요.</p>
+    <div class="card-grid" data-calculator-grid>{publicCalculators.map((item) => <CalculatorCard item={item} />)}</div>
+    <div class="no-results" data-no-results hidden><span aria-hidden="true">🦊</span><h2>찾는 계산기가 아직 없어요</h2><p>검색어를 짧게 바꾸거나 전체 버튼을 눌러보세요.</p></div>
+  </section>
+</BaseLayout>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('#calculator-filter');
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-calculator-card]')];
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-category]')];
+  const count = document.querySelector<HTMLElement>('[data-result-count]');
+  const empty = document.querySelector<HTMLElement>('[data-no-results]');
+  let category = 'all';
+  function update() {
+    const keyword = (input?.value ?? '').trim().toLocaleLowerCase('ko-KR');
+    let visible = 0;
+    cards.forEach((card) => {
+      const text = (card.dataset.search ?? '').toLocaleLowerCase('ko-KR');
+      const categoryMatch = category === 'all' || text.includes(category);
+      const keywordMatch = !keyword || text.includes(keyword);
+      card.hidden = !(categoryMatch && keywordMatch);
+      if (!card.hidden) visible += 1;
+    });
+    if (count) count.textContent = String(visible);
+    if (empty) empty.hidden = visible !== 0;
+    const url = new URL(window.location.href);
+    if (keyword) url.searchParams.set('q', keyword); else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+  }
+  if (input) {
+    input.value = new URLSearchParams(location.search).get('q') ?? '';
+    input.addEventListener('input', update);
+  }
+  buttons.forEach((button) => button.addEventListener('click', () => {
+    category = button.dataset.category ?? 'all';
+    buttons.forEach((item) => { const selected = item === button; item.classList.toggle('active', selected); item.setAttribute('aria-pressed', String(selected)); });
+    update();
+  }));
+  update();
+</script>
+
+<style>
+  .calculators-section { padding-bottom: 80px; }
+  .search-panel { margin-bottom: 18px; padding: clamp(18px, 4vw, 28px); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); box-shadow: var(--shadow-sm); }
+  .search-panel > label { display: block; margin-bottom: 8px; font-weight: 800; }
+  .search-input { display: grid; grid-template-columns: auto 1fr; align-items: center; border: 1.5px solid var(--border-strong); border-radius: 14px; background: var(--surface-strong); }
+  .search-input span { padding-left: 14px; font-size: 1.6rem; }
+  .search-input input { min-width: 0; min-height: 54px; padding: 10px 14px; border: 0; color: var(--text); background: transparent; outline: 0; }
+  .filter-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .filter-buttons button { min-height: 42px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 999px; color: var(--text); background: var(--surface); cursor: pointer; }
+  .filter-buttons button.active { border-color: var(--primary); color: var(--primary-contrast); background: var(--primary); font-weight: 800; }
+  .result-count { margin: 20px 0; color: var(--text-soft); }
+  .no-results { padding: 60px 20px; text-align: center; }
+  .no-results span { font-size: 3rem; }
+  [hidden] { display: none !important; }
+</style>
+

@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="페이지를 찾을 수 없습니다" description="요청한 솔솔계산소 페이지를 찾지 못했습니다." noindex>
+  <section class="not-found container">
+    <span aria-hidden="true">🐾</span>
+    <p class="eyebrow">404</p>
+    <h1>길을 잘못 찾았어요</h1>
+    <p>주소가 바뀌었거나 없는 페이지입니다. 홈 또는 전체 계산기에서 다시 찾아보세요.</p>
+    <div><a class="button" href="/">홈으로 가기</a><a class="button secondary" href="/calculators/">전체 계산기 보기</a></div>
+  </section>
+</BaseLayout>
+<style>
+  .not-found { display: grid; min-height: 65vh; place-content: center; justify-items: center; padding: 70px 0; text-align: center; }
+  .not-found > span { font-size: 4rem; } .not-found h1 { margin-bottom: 12px; } .not-found p:not(.eyebrow) { max-width: 560px; color: var(--text-soft); }
+  .not-found div { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 16px; }
+</style>
+

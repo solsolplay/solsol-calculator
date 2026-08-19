@@ -1,0 +1,27 @@
+---
+import CalculatorLayout from '../../components/CalculatorLayout.astro';
+import { getCalculator } from '../../data/calculators';
+import { sources } from '../../data/sources';
+const calculator = getCalculator('dividend');
+---
+
+<CalculatorLayout calculator={calculator}
+  formula="세전 연 배당금 = 보유 주식 수 × 1회 주당 배당금 × 연간 지급 횟수, 세후 금액 = 세전 금액 × (1−예상 세율)."
+  example="100주가 1회 500원씩 분기마다 배당하고 예상 세율이 15.4%라면 세전 연 20만 원, 세후 약 16만 9,200원입니다."
+  caveats={["15.4%는 국내 일반 배당의 단순 예시이며 계좌·국가·금융소득 규모에 따라 달라집니다.", "해외 배당은 현지 원천징수와 국내 과세를 따로 확인해야 합니다.", "배당금과 지급 횟수는 회사 결정에 따라 변할 수 있습니다."]}
+  sources={[sources.nationalTaxRates]} version="1.0.0">
+  <section slot="form" class="calculator-panel"><h2>배당 조건 입력</h2><form id="dividend-form" novalidate><div class="field-grid">
+    <div class="field"><label for="dividend-shares">보유 주식 수</label><input id="dividend-shares" type="number" min="0" step="1" value="100" required /></div>
+    <div class="field"><label for="dividend-per-share">1회 주당 배당금(원)</label><input id="dividend-per-share" type="number" min="0" step="0.01" value="500" required /></div>
+    <div class="field"><label for="dividend-frequency">연간 지급 횟수</label><select id="dividend-frequency"><option value="1">연 1회</option><option value="2">반기 2회</option><option value="4" selected>분기 4회</option><option value="12">월 12회</option></select></div>
+    <div class="field"><label for="dividend-tax">예상 세율(%)</label><input id="dividend-tax" type="number" min="0" max="100" step="0.1" value="15.4" /><small>본인 상황에 맞게 바꿔 주세요.</small></div>
+  </div><div class="form-actions"><button class="button" type="submit">계산하기</button><button class="button secondary" type="reset">초기화</button></div><p id="dividend-error" class="error-message" role="alert"></p></form></section>
+  <section slot="result" class="result-panel"><h2>계산 결과</h2><div id="dividend-empty" class="result-empty">주식 수와 배당 조건을 입력하면 세전·세후 예상액을 보여드려요.</div><div id="dividend-content" class="result-content" hidden aria-live="polite"><div class="result-primary"><span class="label">세후 연 배당금</span><strong id="dividend-result" data-testid="dividend-result"></strong></div><dl class="result-list"><div><dt>세전 연 배당금</dt><dd id="dividend-gross"></dd></div><div><dt>예상 세금</dt><dd id="dividend-tax-result"></dd></div><div><dt>1회 세전 배당</dt><dd id="dividend-payment"></dd></div><div><dt>세후 월평균</dt><dd id="dividend-monthly"></dd></div></dl></div></section>
+</CalculatorLayout>
+
+<script>
+  import { calculateDividend } from '../../lib/calculators/dividend';
+  import { inputNumber, setText, showError, showResult, won } from '../../lib/browser';
+  document.querySelector<HTMLFormElement>('#dividend-form')?.addEventListener('submit', (event) => { event.preventDefault(); try { const r = calculateDividend(inputNumber('dividend-shares','보유 주식 수'), inputNumber('dividend-per-share','주당 배당금'), inputNumber('dividend-frequency','지급 횟수'), inputNumber('dividend-tax','예상 세율')); setText('dividend-result', won.format(r.netAnnual)); setText('dividend-gross', won.format(r.grossAnnual)); setText('dividend-tax-result', won.format(r.tax)); setText('dividend-payment', won.format(r.grossPerPayment)); setText('dividend-monthly', won.format(r.netMonthlyAverage)); showResult('dividend-error','dividend-empty','dividend-content'); } catch(error){ showError('dividend-error',error); } });
+</script>
+

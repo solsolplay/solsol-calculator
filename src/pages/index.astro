@@ -1,11 +1,126 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CalculatorCard from '../components/CalculatorCard.astro';
+import { categories, publicCalculators } from '../data/calculators';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const popular = publicCalculators.filter((item) => item.popular).slice(0, 6);
+const newItems = publicCalculators.slice(6, 12);
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout title="솔솔계산소" description="나이·배당금·로또·대출·BMI·날짜·퍼센트 등 생활에 필요한 무료 계산기를 한곳에서 이용하세요.">
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">필요한 계산을 한곳에서</p>
+        <h1>복잡한 계산,<br /><span>솔솔 풀어드려요</span></h1>
+        <p class="hero-lead">회원가입 없이 숫자를 입력하면 바로 결과와 계산 근거를 확인할 수 있어요.</p>
+        <form class="hero-search" action="/calculators/" method="get" role="search">
+          <label class="visually-hidden" for="home-search">필요한 계산기 검색</label>
+          <span aria-hidden="true">⌕</span>
+          <input id="home-search" name="q" type="search" placeholder="어떤 계산기가 필요하세요?" autocomplete="off" />
+          <button class="button" type="submit">계산기 찾기</button>
+        </form>
+        <div class="hero-actions">
+          <a href="/calculators/">12개 계산기 모두 보기</a>
+          <span>입력값은 서버로 보내지 않아요</span>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="art-glow" aria-hidden="true"></div>
+        <img class="mascot-day" src="/images/mascots/solsol-zodiac-day.webp" width="1200" height="800" alt="밝은 계산 정원에 모인 귀여운 12지신 계산 도우미" fetchpriority="high" />
+        <img class="mascot-night" src="/images/mascots/solsol-zodiac-night.webp" width="1200" height="800" alt="별빛 계산소에 모인 귀여운 12지신 계산 도우미" fetchpriority="high" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section popular-section">
+    <div class="container">
+      <div class="section-heading">
+        <div><p class="eyebrow">처음이라면 여기부터</p><h2>많이 찾는 계산기</h2></div>
+        <a href="/calculators/">전체 계산기 보기</a>
+      </div>
+      <div class="card-grid">{popular.map((item) => <CalculatorCard item={item} />)}</div>
+    </div>
+  </section>
+
+  <section class="trust-strip" aria-label="서비스 특징">
+    <div class="container trust-grid">
+      <div><span aria-hidden="true">🛡️</span><strong>회원가입 없이</strong><small>바로 계산할 수 있어요</small></div>
+      <div><span aria-hidden="true">🔒</span><strong>입력값은 기기 안에서</strong><small>서버 전송 없이 처리해요</small></div>
+      <div><span aria-hidden="true">📱</span><strong>휴대폰에서도 편하게</strong><small>작은 화면에 맞춰 보여요</small></div>
+    </div>
+  </section>
+
+  <section class="section categories-section">
+    <div class="container">
+      <div class="section-heading"><div><p class="eyebrow">목적에 맞게 골라요</p><h2>주제별로 모아보기</h2></div></div>
+      <div class="category-grid">
+        {categories.map((category) => (
+          <a href={category.path}>
+            <span aria-hidden="true">{category.icon}</span>
+            <strong>{category.name}</strong>
+            <p>{category.description}</p>
+            <b aria-hidden="true">→</b>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section new-section">
+    <div class="container">
+      <div class="section-heading">
+        <div><p class="eyebrow">새로 준비했어요</p><h2>생활을 더 편하게 하는 계산기</h2></div>
+      </div>
+      <div class="card-grid">{newItems.map((item) => <CalculatorCard item={item} compact />)}</div>
+    </div>
+  </section>
+
+  <section class="guide-section">
+    <div class="container guide-card">
+      <div><p class="eyebrow">숫자만 보여주지 않아요</p><h2>공식·예시·주의사항까지 확인하세요</h2></div>
+      <p>각 계산기에는 사용한 공식, 달라질 수 있는 조건, 공식 자료 링크와 검토일을 함께 적었습니다. 금융·세금·건강 결과는 참고용으로 사용하고 중요한 결정 전 해당 기관의 최신 기준을 다시 확인해 주세요.</p>
+      <a class="button secondary" href="/about/">솔솔계산소 원칙 보기</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero { padding: clamp(44px, 7vw, 86px) 0 38px; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(360px, 0.94fr); gap: 38px; align-items: center; }
+  .hero-copy h1 { margin-bottom: 18px; font-size: clamp(2.5rem, 6vw, 4.7rem); }
+  .hero-copy h1 span { color: var(--primary-strong); }
+  .hero-lead { max-width: 680px; margin-bottom: 26px; color: var(--text-soft); font-size: clamp(1rem, 2vw, 1.17rem); }
+  .hero-search { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; max-width: 720px; padding: 8px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-md); }
+  .hero-search > span { padding-left: 10px; color: var(--text-soft); font-size: 1.65rem; }
+  .hero-search input { width: 100%; min-width: 0; min-height: 48px; border: 0; color: var(--text); background: transparent; outline: 0; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 14px 22px; margin-top: 18px; color: var(--text-soft); font-size: 0.9rem; }
+  .hero-actions a { font-weight: 800; }
+  .hero-art { position: relative; min-height: 390px; }
+  .hero-art img { position: absolute; z-index: 2; inset: 50% auto auto 50%; width: min(100%, 610px); border: 1px solid var(--border); border-radius: 28px; box-shadow: var(--shadow-md); transform: translate(-50%, -50%); }
+  .art-glow { position: absolute; inset: 10% 5%; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--primary) 20%, transparent), transparent 68%); }
+  .mascot-night { display: none; }
+  :global(html[data-theme='night']) .mascot-day { display: none; }
+  :global(html[data-theme='night']) .mascot-night { display: block; }
+  .popular-section { padding-top: 36px; }
+  .trust-strip { padding: 18px 0; border-block: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 72%, transparent); }
+  .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .trust-grid > div { display: grid; grid-template-columns: 44px 1fr; gap: 0 12px; align-items: center; padding: 10px 16px; }
+  .trust-grid span { grid-row: 1 / 3; display: grid; width: 44px; aspect-ratio: 1; place-items: center; border-radius: 14px; background: var(--bg-soft); font-size: 1.4rem; }
+  .trust-grid strong { align-self: end; }
+  .trust-grid small { align-self: start; color: var(--text-soft); }
+  .category-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .category-grid a { position: relative; display: grid; min-height: 210px; align-content: start; padding: 24px; border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text); background: var(--surface); box-shadow: var(--shadow-sm); text-decoration: none; }
+  .category-grid a:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .category-grid span { margin-bottom: 16px; font-size: 2rem; }
+  .category-grid strong { font-size: 1.15rem; }
+  .category-grid p { margin: 7px 0 0; color: var(--text-soft); font-size: .9rem; }
+  .category-grid b { position: absolute; right: 22px; bottom: 18px; color: var(--primary-strong); font-size: 1.3rem; }
+  .new-section { padding-top: 18px; }
+  .guide-section { padding: 10px 0 72px; }
+  .guide-card { display: grid; grid-template-columns: 1.1fr 1fr auto; gap: 28px; align-items: center; padding: clamp(24px, 5vw, 42px); border: 1px solid var(--border); border-radius: var(--radius-lg); background: linear-gradient(135deg, var(--bg-soft), var(--surface)); }
+  .guide-card h2, .guide-card p { margin-bottom: 0; }
+  .guide-card p { color: var(--text-soft); }
+  @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; } .hero-art { min-height: 330px; order: -1; } .category-grid { grid-template-columns: repeat(2, 1fr); } .guide-card { grid-template-columns: 1fr; } }
+  @media (max-width: 650px) { .hero-art { min-height: 255px; } .hero-search { grid-template-columns: auto 1fr; } .hero-search button { grid-column: 1 / -1; width: 100%; } .trust-grid { grid-template-columns: 1fr; } .category-grid { grid-template-columns: 1fr; } .category-grid a { min-height: 170px; } }
+</style>

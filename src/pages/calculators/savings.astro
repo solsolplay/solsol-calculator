@@ -1,0 +1,22 @@
+---
+import CalculatorLayout from '../../components/CalculatorLayout.astro';
+import { getCalculator } from '../../data/calculators';
+import { sources } from '../../data/sources';
+const calculator = getCalculator('savings');
+---
+
+<CalculatorLayout calculator={calculator}
+  formula="월초 납입 단리식 적금으로 보고 각 납입금의 예치 개월 수를 합산해 세전 이자를 구한 뒤 입력한 이자 세율을 뺍니다."
+  example="매월 30만 원을 연 4%로 12개월 납입하면 360만 원의 원금과 납입 시점별 예상 이자를 계산합니다."
+  caveats={["은행의 납입일·일수·우대금리·중도해지 규칙에 따라 달라집니다.", "15.4% 세율은 일반적인 예시이며 비과세·세금우대 상품에는 맞지 않을 수 있습니다.", "실제 가입 전 상품설명서의 만기 예상액을 확인하세요."]}
+  sources={[sources.nationalTaxRates]} version="1.0.0">
+  <section slot="form" class="calculator-panel"><h2>적금 조건 입력</h2><form id="savings-form" novalidate><div class="field-grid"><div class="field"><label for="savings-monthly">월 납입액(원)</label><input id="savings-monthly" type="number" min="1" step="1" value="300000" required /></div><div class="field"><label for="savings-rate">연 이자율(%)</label><input id="savings-rate" type="number" min="0" max="100" step="0.01" value="4" required /></div><div class="field"><label for="savings-months">납입 기간(개월)</label><input id="savings-months" type="number" min="1" max="1200" step="1" value="12" required /></div><div class="field"><label for="savings-tax">이자 세율(%)</label><input id="savings-tax" type="number" min="0" max="100" step="0.1" value="15.4" required /></div></div><div class="form-actions"><button class="button" type="submit">계산하기</button><button class="button secondary" type="reset">초기화</button></div><p id="savings-error" class="error-message" role="alert"></p></form></section>
+  <section slot="result" class="result-panel"><h2>계산 결과</h2><div id="savings-empty" class="result-empty">월 납입액과 금리를 입력하면 만기 예상액을 보여드려요.</div><div id="savings-content" class="result-content" hidden aria-live="polite"><div class="result-primary"><span class="label">세후 만기 예상액</span><strong id="savings-result" data-testid="savings-result"></strong></div><dl class="result-list"><div><dt>납입원금</dt><dd id="savings-principal"></dd></div><div><dt>세전 예상 이자</dt><dd id="savings-gross"></dd></div><div><dt>예상 세금</dt><dd id="savings-tax-result"></dd></div><div><dt>세후 예상 이자</dt><dd id="savings-net"></dd></div></dl></div></section>
+</CalculatorLayout>
+
+<script>
+  import { calculateSavings } from '../../lib/calculators/savings';
+  import { inputNumber, setText, showError, showResult, won } from '../../lib/browser';
+  document.querySelector<HTMLFormElement>('#savings-form')?.addEventListener('submit',(event)=>{event.preventDefault();try{const r=calculateSavings(inputNumber('savings-monthly','월 납입액'),inputNumber('savings-rate','연 이자율'),inputNumber('savings-months','납입 기간'),inputNumber('savings-tax','이자 세율'));setText('savings-result',won.format(r.maturityAmount));setText('savings-principal',won.format(r.principal));setText('savings-gross',won.format(r.grossInterest));setText('savings-tax-result',won.format(r.tax));setText('savings-net',won.format(r.netInterest));showResult('savings-error','savings-empty','savings-content');}catch(error){showError('savings-error',error);}});
+</script>
+

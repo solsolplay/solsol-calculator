@@ -1,0 +1,25 @@
+---
+import CalculatorLayout from '../../components/CalculatorLayout.astro';
+import { getCalculator } from '../../data/calculators';
+const calculator = getCalculator('loan-interest');
+---
+
+<CalculatorLayout calculator={calculator}
+  formula="월 이자율은 연 이자율÷12로 두고, 선택한 상환방식의 표준 공식으로 월 납입액과 총이자를 합산합니다."
+  example="1억 원을 연 4%, 30년 원리금균등으로 빌리면 매월 같은 원리금을 내는 것으로 계산합니다."
+  caveats={["은행의 일수 계산, 중도상환, 보증료, 인지세, 우대금리는 포함하지 않습니다.", "변동금리는 입력한 금리가 전체 기간 유지된다고 가정합니다.", "실제 대출 실행 전 금융기관 상환예정표를 확인하세요."]} version="1.0.0">
+  <section slot="form" class="calculator-panel"><h2>대출 조건 입력</h2><form id="loan-form" novalidate><div class="field-grid">
+    <div class="field full"><label for="loan-principal">대출 원금(원)</label><input id="loan-principal" type="number" min="1" step="1" value="100000000" required /></div>
+    <div class="field"><label for="loan-rate">연 이자율(%)</label><input id="loan-rate" type="number" min="0" max="100" step="0.01" value="4" required /></div>
+    <div class="field"><label for="loan-months">상환 기간(개월)</label><input id="loan-months" type="number" min="1" max="1200" step="1" value="360" required /></div>
+    <div class="field full"><label for="loan-type">상환방식</label><select id="loan-type"><option value="equal-payment">원리금균등</option><option value="equal-principal">원금균등</option><option value="bullet">만기일시상환</option></select></div>
+  </div><div class="form-actions"><button class="button" type="submit">계산하기</button><button class="button secondary" type="reset">초기화</button></div><p id="loan-error" class="error-message" role="alert"></p></form></section>
+  <section slot="result" class="result-panel"><h2>계산 결과</h2><div id="loan-empty" class="result-empty">원금·금리·기간을 입력하면 첫 달 납입액과 총이자를 보여드려요.</div><div id="loan-content" class="result-content" hidden aria-live="polite"><div class="result-primary"><span class="label">첫 달 예상 납입액</span><strong id="loan-result" data-testid="loan-result"></strong></div><dl class="result-list"><div><dt>마지막 달 납입액</dt><dd id="loan-last"></dd></div><div><dt>월평균 납입액</dt><dd id="loan-average"></dd></div><div><dt>총이자</dt><dd id="loan-interest"></dd></div><div><dt>총상환액</dt><dd id="loan-total"></dd></div></dl></div></section>
+</CalculatorLayout>
+
+<script>
+  import { calculateLoan, type RepaymentType } from '../../lib/calculators/loan';
+  import { inputNumber, inputSelect, setText, showError, showResult, won } from '../../lib/browser';
+  document.querySelector<HTMLFormElement>('#loan-form')?.addEventListener('submit',(event)=>{event.preventDefault();try{const r=calculateLoan(inputNumber('loan-principal','대출 원금'),inputNumber('loan-rate','연 이자율'),inputNumber('loan-months','상환 기간'),inputSelect('loan-type') as RepaymentType);setText('loan-result',won.format(r.firstPayment));setText('loan-last',won.format(r.lastPayment));setText('loan-average',won.format(r.averagePayment));setText('loan-interest',won.format(r.totalInterest));setText('loan-total',won.format(r.totalPayment));showResult('loan-error','loan-empty','loan-content');}catch(error){showError('loan-error',error);}});
+</script>
+

@@ -1,0 +1,86 @@
+---
+import '../styles/calculator.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CalculatorCard from './CalculatorCard.astro';
+import ResultEvidence from './ResultEvidence.astro';
+import { getCategory, getRelatedCalculators, type CalculatorItem } from '../data/calculators';
+
+type Source = { label: string; url: string };
+type Props = {
+  calculator: CalculatorItem;
+  formula: string;
+  example: string;
+  caveats: string[];
+  sources?: Source[];
+  version?: string;
+};
+const { calculator, formula, example, caveats, sources = [], version = '1.0.0' } = Astro.props;
+const category = getCategory(calculator.category);
+const related = getRelatedCalculators(calculator.id);
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: calculator.name,
+    description: calculator.summary,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'KRW' },
+    url: `https://solsolplay.com${calculator.path}`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '홈', item: 'https://solsolplay.com/' },
+      { '@type': 'ListItem', position: 2, name: category.name, item: `https://solsolplay.com${category.path}` },
+      { '@type': 'ListItem', position: 3, name: calculator.name, item: `https://solsolplay.com${calculator.path}` },
+    ],
+  },
+];
+---
+
+<BaseLayout title={calculator.name} description={`${calculator.summary} ${calculator.detail}`} schema={schema}>
+  <div class="container">
+    <nav class="breadcrumb" aria-label="현재 위치">
+      <a href="/">홈</a><span aria-hidden="true">›</span>
+      <a href={category.path}>{category.name}</a><span aria-hidden="true">›</span>
+      <span aria-current="page">{calculator.shortName}</span>
+    </nav>
+    <header class="calculator-heading">
+      <div class="calculator-mascot" aria-hidden="true">{calculator.icon}</div>
+      <div>
+        <p class="eyebrow">{calculator.mascot}가 도와드려요</p>
+        <h1>{calculator.name}</h1>
+        <p>{calculator.detail}</p>
+      </div>
+    </header>
+
+    <div class="calculator-workspace">
+      <slot name="form" />
+      <slot name="result" />
+    </div>
+
+    <ResultEvidence formula={formula} example={example} caveats={caveats} sources={sources} version={version} />
+
+    <section class="related-section" aria-labelledby="related-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">다음 계산도 솔솔</p><h2 id="related-title">함께 쓰면 좋은 계산기</h2></div>
+        <a href="/calculators/">전체 계산기 보기</a>
+      </div>
+      <div class="card-grid">{related.map((item) => <CalculatorCard item={item} compact />)}</div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('.calculator-panel form').forEach((form) => {
+    form.addEventListener('reset', () => {
+      window.setTimeout(() => {
+        document.querySelectorAll<HTMLElement>('.result-content').forEach((item) => { item.hidden = true; });
+        document.querySelectorAll<HTMLElement>('.result-empty').forEach((item) => { item.hidden = false; });
+        document.querySelectorAll<HTMLElement>('.error-message').forEach((item) => { item.textContent = ''; });
+      }, 0);
+    });
+  });
+</script>

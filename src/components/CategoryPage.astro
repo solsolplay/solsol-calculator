@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CalculatorCard from './CalculatorCard.astro';
+import { getCategory, publicCalculators, type CategoryId } from '../data/calculators';
+type Props = { categoryId: CategoryId };
+const { categoryId } = Astro.props;
+const category = getCategory(categoryId);
+const items = publicCalculators.filter((item) => item.category === categoryId);
+---
+
+<BaseLayout title={category.name} description={`${category.description} 솔솔계산소의 ${category.name} 계산기를 모두 확인하세요.`}>
+  <header class="page-hero container">
+    <p class="eyebrow">{category.icon} 주제별 계산기</p>
+    <h1>{category.name}</h1>
+    <p class="lead">{category.description}</p>
+  </header>
+  <section class="container section category-list" aria-label={`${category.name} 계산기 목록`}>
+    <div class="card-grid">{items.map((item) => <CalculatorCard item={item} />)}</div>
+    <div class="category-help content-card">
+      <h2>어떤 계산기를 선택할까요?</h2>
+      <ul>{items.map((item) => <li><a href={item.path}><strong>{item.shortName}</strong></a> — {item.detail}</li>)}</ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .category-list { padding-top: 8px; }
+  .category-help { margin-top: 34px; }
+  .category-help h2 { font-size: 1.45rem; }
+  .category-help li + li { margin-top: 9px; }
+</style>
+

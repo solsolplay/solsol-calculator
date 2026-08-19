@@ -1,0 +1,20 @@
+---
+import CalculatorLayout from '../../components/CalculatorLayout.astro';
+import { getCalculator } from '../../data/calculators';
+const calculator = getCalculator('compound-interest');
+---
+
+<CalculatorLayout calculator={calculator}
+  formula="월 수익률을 연 수익률÷12로 두고 초기금은 매월 복리, 월 적립금은 매월 말 납입하는 연금의 미래가치 공식으로 계산합니다."
+  example="초기 1천만 원, 매월 30만 원, 연 7%, 10년을 가정하면 납입원금과 복리 예상수익을 나누어 확인할 수 있습니다."
+  caveats={["수익률이 매달 일정하고 월말에 적립한다고 가정합니다.", "세금·수수료·물가·환율·손실 변동은 포함하지 않습니다.", "과거 수익률은 미래 수익을 보장하지 않습니다."]} version="1.0.0">
+  <section slot="form" class="calculator-panel"><h2>복리 조건 입력</h2><form id="compound-form" novalidate><div class="field-grid"><div class="field"><label for="compound-principal">초기 투자금(원)</label><input id="compound-principal" type="number" min="0" step="1" value="10000000" required /></div><div class="field"><label for="compound-monthly">월 적립금(원)</label><input id="compound-monthly" type="number" min="0" step="1" value="300000" required /></div><div class="field"><label for="compound-rate">예상 연 수익률(%)</label><input id="compound-rate" type="number" min="-99" max="100" step="0.1" value="7" required /></div><div class="field"><label for="compound-years">투자 기간(년)</label><input id="compound-years" type="number" min="0.0833" max="100" step="0.1" value="10" required /></div></div><div class="form-actions"><button class="button" type="submit">계산하기</button><button class="button secondary" type="reset">초기화</button></div><p id="compound-error" class="error-message" role="alert"></p></form></section>
+  <section slot="result" class="result-panel"><h2>계산 결과</h2><div id="compound-empty" class="result-empty">초기금과 적립 조건을 입력하면 복리 예상 결과를 보여드려요.</div><div id="compound-content" class="result-content" hidden aria-live="polite"><div class="result-primary"><span class="label">예상 최종 금액</span><strong id="compound-result" data-testid="compound-result"></strong></div><dl class="result-list"><div><dt>총 납입원금</dt><dd id="compound-contributed"></dd></div><div><dt>예상 수익</dt><dd id="compound-earnings"></dd></div><div><dt>계산 기간</dt><dd id="compound-months"></dd></div></dl></div></section>
+</CalculatorLayout>
+
+<script>
+  import { calculateCompound } from '../../lib/calculators/compound';
+  import { inputNumber, number, setText, showError, showResult, won } from '../../lib/browser';
+  document.querySelector<HTMLFormElement>('#compound-form')?.addEventListener('submit',(event)=>{event.preventDefault();try{const r=calculateCompound(inputNumber('compound-principal','초기 투자금'),inputNumber('compound-monthly','월 적립금'),inputNumber('compound-rate','연 수익률'),inputNumber('compound-years','투자 기간'));setText('compound-result',won.format(r.finalAmount));setText('compound-contributed',won.format(r.contributed));setText('compound-earnings',won.format(r.earnings));setText('compound-months',`${number.format(r.months)}개월`);showResult('compound-error','compound-empty','compound-content');}catch(error){showError('compound-error',error);}});
+</script>
+

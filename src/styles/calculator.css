@@ -1,0 +1,262 @@
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  padding: 22px 0 0;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
+.breadcrumb a {
+  color: inherit;
+}
+
+.calculator-heading {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  gap: 22px;
+  align-items: center;
+  padding-block: 34px 28px;
+}
+
+.calculator-mascot {
+  display: grid;
+  width: 82px;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  font-size: 2.7rem;
+}
+
+.calculator-heading h1 {
+  margin-bottom: 10px;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.calculator-heading p {
+  margin-bottom: 0;
+  color: var(--text-soft);
+  font-size: 1.06rem;
+}
+
+.calculator-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(300px, 0.96fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.calculator-panel,
+.result-panel {
+  padding: clamp(22px, 4vw, 34px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.calculator-panel h2,
+.result-panel h2 {
+  margin-bottom: 20px;
+  font-size: 1.35rem;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+.field.full {
+  grid-column: 1 / -1;
+}
+
+.field label,
+.field legend {
+  color: var(--text);
+  font-weight: 750;
+}
+
+.field small {
+  color: var(--text-soft);
+  line-height: 1.4;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  min-height: 50px;
+  padding: 10px 13px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 12px;
+  color: var(--text);
+  background: var(--surface-strong);
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--primary);
+  outline: 3px solid color-mix(in srgb, var(--primary) 24%, transparent);
+  outline-offset: 1px;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.error-message {
+  min-height: 1.6em;
+  margin: 14px 0 0;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.result-empty {
+  display: grid;
+  min-height: 220px;
+  place-items: center;
+  padding: 28px;
+  border: 2px dashed var(--border-strong);
+  border-radius: 16px;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+.result-content[hidden],
+.result-empty[hidden] {
+  display: none;
+}
+
+.result-primary {
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 17%, var(--surface)), var(--surface-strong));
+}
+
+.result-primary .label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.result-primary strong {
+  color: var(--primary-strong);
+  font-size: clamp(1.7rem, 5vw, 2.6rem);
+  line-height: 1.2;
+}
+
+.result-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.result-list > div {
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) minmax(100px, auto);
+  gap: 14px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.result-list dt {
+  color: var(--text-soft);
+}
+
+.result-list dd {
+  margin: 0;
+  font-weight: 800;
+  text-align: right;
+}
+
+.evidence-section {
+  padding-block: 54px;
+}
+
+.evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.evidence-card {
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.evidence-card h2,
+.evidence-card h3 {
+  margin-bottom: 10px;
+  font-size: 1.12rem;
+}
+
+.evidence-card p:last-child,
+.evidence-card ul:last-child {
+  margin-bottom: 0;
+}
+
+.source-list {
+  padding-left: 20px;
+}
+
+.source-list li + li {
+  margin-top: 8px;
+}
+
+.related-section {
+  padding-block: 8px 72px;
+}
+
+@media (max-width: 800px) {
+  .calculator-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .evidence-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .calculator-heading {
+    grid-template-columns: 64px 1fr;
+    gap: 14px;
+  }
+
+  .calculator-mascot {
+    width: 64px;
+    border-radius: 18px;
+    font-size: 2rem;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-list > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .result-list dd {
+    text-align: left;
+  }
+}
+

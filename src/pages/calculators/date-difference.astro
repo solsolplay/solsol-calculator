@@ -1,0 +1,21 @@
+---
+import CalculatorLayout from '../../components/CalculatorLayout.astro';
+import { getCalculator } from '../../data/calculators';
+const calculator = getCalculator('date-difference');
+---
+
+<CalculatorLayout calculator={calculator}
+  formula="종료일의 UTC 날짜값에서 시작일의 UTC 날짜값을 뺀 뒤 24시간으로 나눕니다. 양쪽 날짜 포함을 고르면 1일을 더합니다."
+  example="8월 1일부터 8월 8일까지의 차이는 7일이며, 시작일과 종료일을 모두 세면 8일입니다."
+  caveats={["시간은 제외하고 달력 날짜만 비교합니다.", "종료일이 시작일보다 빠르면 계산하지 않습니다.", "숙박일·근무일처럼 업종별 포함 규칙은 따로 확인하세요."]} version="1.0.0">
+  <section slot="form" class="calculator-panel"><h2>두 날짜 입력</h2><form id="date-form" novalidate><div class="field-grid"><div class="field"><label for="date-start">시작일</label><input id="date-start" type="date" required /></div><div class="field"><label for="date-end">종료일</label><input id="date-end" type="date" required /></div><div class="field full"><label><input id="date-inclusive" type="checkbox" /> 시작일과 종료일을 모두 날짜 수에 포함</label></div></div><div class="form-actions"><button class="button" type="submit">계산하기</button><button class="button secondary" type="reset">초기화</button></div><p id="date-error" class="error-message" role="alert"></p></form></section>
+  <section slot="result" class="result-panel"><h2>계산 결과</h2><div id="date-empty" class="result-empty">시작일과 종료일을 선택하면 두 날짜 사이를 계산해요.</div><div id="date-content" class="result-content" hidden aria-live="polite"><div class="result-primary"><span class="label">두 날짜 사이</span><strong id="date-result" data-testid="date-result"></strong></div><dl class="result-list"><div><dt>완전한 주</dt><dd id="date-weeks"></dd></div><div><dt>남은 날짜</dt><dd id="date-rest"></dd></div></dl></div></section>
+</CalculatorLayout>
+
+<script>
+  import { calculateDateDifference } from '../../lib/calculators/date';
+  import { inputDate, localTodayInput, number, setText, showError, showResult } from '../../lib/browser';
+  const start=document.querySelector<HTMLInputElement>('#date-start');const end=document.querySelector<HTMLInputElement>('#date-end');const today=localTodayInput();if(start)start.value=today;if(end){const next=new Date(`${today}T00:00:00`);next.setDate(next.getDate()+7);end.value=new Date(next.getTime()-next.getTimezoneOffset()*60000).toISOString().slice(0,10);}
+  document.querySelector<HTMLFormElement>('#date-form')?.addEventListener('submit',(event)=>{event.preventDefault();try{const inclusive=(document.querySelector<HTMLInputElement>('#date-inclusive')?.checked)??false;const r=calculateDateDifference(inputDate('date-start','시작일'),inputDate('date-end','종료일'),inclusive);setText('date-result',`${number.format(r.days)}일`);setText('date-weeks',`${number.format(r.weeks)}주`);setText('date-rest',`${r.remainingDays}일`);showResult('date-error','date-empty','date-content');}catch(error){showError('date-error',error);}});
+</script>
+

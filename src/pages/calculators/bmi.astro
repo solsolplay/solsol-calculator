@@ -1,0 +1,22 @@
+---
+import CalculatorLayout from '../../components/CalculatorLayout.astro';
+import { getCalculator } from '../../data/calculators';
+import { sources } from '../../data/sources';
+const calculator = getCalculator('bmi');
+---
+
+<CalculatorLayout calculator={calculator}
+  formula="BMI = 몸무게(kg) ÷ 키(m)의 제곱으로 계산합니다. 이 페이지는 성인 기준 참고용입니다."
+  example="키 170cm, 몸무게 65kg이면 65÷1.7²로 계산해 BMI 약 22.5입니다."
+  caveats={["근육량·체지방 분포·임신 여부를 반영하지 않습니다.", "어린이와 청소년은 성인 BMI 분류 대신 성장도표를 사용해야 합니다.", "건강 상태의 진단이나 치료 판단을 대신하지 않습니다."]}
+  sources={[sources.bmi]} version="1.0.0">
+  <section slot="form" class="calculator-panel"><h2>신체 정보 입력</h2><form id="bmi-form" novalidate><div class="field-grid"><div class="field"><label for="bmi-height">키(cm)</label><input id="bmi-height" type="number" min="50" max="250" step="0.1" value="170" required /></div><div class="field"><label for="bmi-weight">몸무게(kg)</label><input id="bmi-weight" type="number" min="10" max="500" step="0.1" value="65" required /></div></div><div class="form-actions"><button class="button" type="submit">계산하기</button><button class="button secondary" type="reset">초기화</button></div><p id="bmi-error" class="error-message" role="alert"></p></form></section>
+  <section slot="result" class="result-panel"><h2>계산 결과</h2><div id="bmi-empty" class="result-empty">키와 몸무게를 입력하면 BMI와 참고 분류를 보여드려요.</div><div id="bmi-content" class="result-content" hidden aria-live="polite"><div class="result-primary"><span class="label">체질량지수</span><strong id="bmi-result" data-testid="bmi-result"></strong></div><dl class="result-list"><div><dt>참고 분류</dt><dd id="bmi-category"></dd></div><div><dt>사용한 단위</dt><dd>kg/m²</dd></div></dl><p class="notice">BMI 18.5 미만은 저체중, 18.5 이상 25 미만은 정상 범위, 25 이상은 질병관리청 지표상 비만 기준에 해당합니다.</p></div></section>
+</CalculatorLayout>
+
+<script>
+  import { calculateBmi } from '../../lib/calculators/bmi';
+  import { inputNumber, setText, showError, showResult } from '../../lib/browser';
+  document.querySelector<HTMLFormElement>('#bmi-form')?.addEventListener('submit',(event)=>{event.preventDefault();try{const r=calculateBmi(inputNumber('bmi-height','키'),inputNumber('bmi-weight','몸무게'));setText('bmi-result',r.bmi);setText('bmi-category',r.category);showResult('bmi-error','bmi-empty','bmi-content');}catch(error){showError('bmi-error',error);}});
+</script>
+

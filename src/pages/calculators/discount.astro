@@ -1,0 +1,20 @@
+---
+import CalculatorLayout from '../../components/CalculatorLayout.astro';
+import { getCalculator } from '../../data/calculators';
+const calculator = getCalculator('discount');
+---
+
+<CalculatorLayout calculator={calculator}
+  formula="첫 할인 가격 = 정가×(1−첫 할인율), 최종 가격 = 첫 할인 가격×(1−추가 할인율)로 순서대로 적용합니다."
+  example="10만 원 상품을 20% 할인한 뒤 추가 10% 쿠폰을 쓰면 7만 2천 원이며 실제 총 할인율은 28%입니다."
+  caveats={["20%와 10%를 더한 30%가 아니라 순서대로 곱해 적용합니다.", "배송비·최소 결제액·카드 청구할인은 포함하지 않습니다.", "판매처의 원 단위 절사 규칙에 따라 실제 결제액이 조금 다를 수 있습니다."]} version="1.0.0">
+  <section slot="form" class="calculator-panel"><h2>가격과 할인율 입력</h2><form id="discount-form" novalidate><div class="field-grid"><div class="field full"><label for="discount-price">정가(원)</label><input id="discount-price" type="number" min="0" step="1" value="100000" required /></div><div class="field"><label for="discount-rate">첫 할인율(%)</label><input id="discount-rate" type="number" min="0" max="100" step="0.1" value="20" required /></div><div class="field"><label for="discount-extra">추가 할인율(%)</label><input id="discount-extra" type="number" min="0" max="100" step="0.1" value="10" /></div></div><div class="form-actions"><button class="button" type="submit">계산하기</button><button class="button secondary" type="reset">초기화</button></div><p id="discount-error" class="error-message" role="alert"></p></form></section>
+  <section slot="result" class="result-panel"><h2>계산 결과</h2><div id="discount-empty" class="result-empty">정가와 할인율을 입력하면 최종 가격을 보여드려요.</div><div id="discount-content" class="result-content" hidden aria-live="polite"><div class="result-primary"><span class="label">최종 결제 예상액</span><strong id="discount-result" data-testid="discount-result"></strong></div><dl class="result-list"><div><dt>총 절약 금액</dt><dd id="discount-saved"></dd></div><div><dt>실제 총 할인율</dt><dd id="discount-actual"></dd></div></dl></div></section>
+</CalculatorLayout>
+
+<script>
+  import { calculateDiscount } from '../../lib/calculators/discount';
+  import { inputNumber, number, setText, showError, showResult, won } from '../../lib/browser';
+  document.querySelector<HTMLFormElement>('#discount-form')?.addEventListener('submit',(event)=>{event.preventDefault();try{const r=calculateDiscount(inputNumber('discount-price','정가'),inputNumber('discount-rate','첫 할인율'),inputNumber('discount-extra','추가 할인율'));setText('discount-result',won.format(r.finalPrice));setText('discount-saved',won.format(r.saved));setText('discount-actual',`${number.format(r.actualRate)}%`);showResult('discount-error','discount-empty','discount-content');}catch(error){showError('discount-error',error);}});
+</script>
+

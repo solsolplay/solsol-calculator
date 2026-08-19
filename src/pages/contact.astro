@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
+---
+
+<BaseLayout title="문의·오류 제보" description="솔솔계산소 계산 오류와 이용 불편을 제보하는 방법을 안내합니다.">
+  <header class="page-hero container"><p class="eyebrow">더 정확한 계산소를 함께 만들어요</p><h1>문의·오류 제보</h1><p class="lead">아래 내용을 복사해 이메일에 붙여 넣으면 문제를 더 빠르게 확인할 수 있습니다.</p></header>
+  <section class="container section contact-grid">
+    <article class="content-card">
+      <h2>오류 제보 양식</h2>
+      <pre id="report-template">계산기 이름:
+사용한 주소:
+입력값(민감정보 제외):
+기대한 결과:
+실제 결과:
+기기·브라우저:
+다시 발생하는 순서:</pre>
+      <div class="contact-actions">
+        <button class="button secondary" type="button" data-copy-template>양식 복사</button>
+        <a class="button" href={`mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent('[솔솔계산소] 문의 또는 오류 제보')}`}>이메일 작성</a>
+      </div>
+      <p class="copy-status" data-copy-status aria-live="polite"></p>
+    </article>
+    <aside class="content-card">
+      <h2>보내지 말아야 할 정보</h2>
+      <ul><li>주민등록번호·계좌번호·카드번호</li><li>비밀번호·인증번호·복구코드</li><li>진단서나 계약서 원본</li></ul>
+      <p>재현에 필요한 숫자는 실제 값 대신 비슷한 예시 값으로 바꿔도 됩니다.</p>
+      <p><strong>운영 이메일</strong><br /><a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a></p>
+    </aside>
+  </section>
+</BaseLayout>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-copy-template]');
+  const status = document.querySelector<HTMLElement>('[data-copy-status]');
+  button?.addEventListener('click', async () => {
+    const text = document.querySelector('#report-template')?.textContent ?? '';
+    try { await navigator.clipboard.writeText(text); if (status) status.textContent = '제보 양식을 복사했습니다.'; }
+    catch { if (status) status.textContent = '복사하지 못했습니다. 양식 내용을 직접 선택해 복사해 주세요.'; }
+  });
+</script>
+
+<style>
+  .contact-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 20px; padding-top: 8px; }
+  pre { padding: 18px; overflow-x: auto; border-radius: 14px; color: var(--text); background: var(--bg-soft); font-family: var(--font-sans); white-space: pre-wrap; }
+  .contact-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .copy-status { min-height: 1.6em; margin: 12px 0 0; color: var(--success); font-weight: 700; }
+  @media(max-width:760px){.contact-grid{grid-template-columns:1fr}}
+</style>
+

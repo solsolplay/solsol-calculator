@@ -1,0 +1,13 @@
+{
+  "name": "솔솔계산소",
+  "short_name": "솔솔계산소",
+  "description": "생활에 필요한 계산을 쉽고 빠르게 확인하는 무료 계산기 모음",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fffaf0",
+  "theme_color": "#079b91",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
+

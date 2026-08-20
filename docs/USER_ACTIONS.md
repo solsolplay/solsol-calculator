@@ -2,8 +2,8 @@
 
 ## 지금 확인할 것
 
-1. `src/config.ts`의 운영 이메일 `contact@solsolplay.com`을 실제로 받을 수 있는지 확인합니다.
-2. 받을 수 없다면 본인이 사용하는 이메일 주소로 바꿉니다.
+1. `src/config.ts`의 운영 이메일이 `steadygo0531@gmail.com`인지 확인합니다.
+2. 나중에 받을 주소가 바뀌면 `contactEmail` 값만 새 주소로 바꿉니다.
 3. 낮·밤 대표 이미지와 전체 문구가 원하는 분위기인지 확인합니다.
 4. 새 완성본을 연 뒤 `npm.cmd ci`와 `npm.cmd run check`를 실행합니다.
 5. `npx.cmd playwright install chromium`을 한 번 실행한 뒤 `npm.cmd run test:e2e:desktop`으로 실제 Chrome 클릭 검사를 합니다.

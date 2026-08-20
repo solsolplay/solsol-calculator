@@ -28,7 +28,15 @@ const defaultSchema = {
 };
 const isHome = Astro.url.pathname === '/';
 const isCalculator = Astro.url.pathname.startsWith('/calculators/');
-const pageClass = isHome ? 'page-home page-world' : isCalculator ? 'page-calculator page-world' : undefined;
+const infoPages = ['/about/', '/contact/', '/privacy/', '/terms/'];
+const isInfoPage = infoPages.includes(Astro.url.pathname);
+const pageClass = isHome
+  ? 'page-home page-world'
+  : isCalculator
+    ? 'page-calculator page-world'
+    : isInfoPage
+      ? 'page-info page-world'
+      : undefined;
 ---
 
 <!doctype html>

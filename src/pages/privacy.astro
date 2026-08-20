@@ -4,16 +4,20 @@ import { siteConfig } from '../config';
 ---
 
 <BaseLayout title="개인정보처리방침" description="솔솔계산소의 개인정보 처리 여부, 기기 저장 정보와 문의 방법을 안내합니다.">
-  <header class="page-hero container"><p class="eyebrow">입력값을 함부로 다루지 않아요</p><h1>개인정보처리방침</h1><p class="lead">시행일: 2026년 8월 20일 · 현재 광고·회원가입·서버 입력값 저장 기능이 없는 초기 버전 기준입니다.</p></header>
+  <header class="page-hero container"><p class="eyebrow">입력값을 함부로 다루지 않아요</p><h1>개인정보처리방침</h1><p class="lead">시행일: 2026년 8월 20일 · 광고·회원가입·서버 입력값 저장 기능이 없는 현재 버전 기준입니다.</p></header>
   <section class="container section prose content-card">
     <h2>1. 계산 입력값</h2>
     <p>생년월일, 금액, 키, 몸무게 등 계산기에 입력한 값은 사용자의 브라우저 안에서 계산되며 솔솔계산소 서버로 전송하거나 저장하지 않습니다.</p>
     <h2>2. 기기에 저장하는 정보</h2>
-    <p>낮·밤 테마 선택값을 브라우저의 localStorage에 <code>solsol-theme</code> 이름으로 저장할 수 있습니다. 사용자는 브라우저 사이트 데이터 삭제 기능으로 언제든 지울 수 있습니다.</p>
+    <p>낮·밤 테마 선택값을 브라우저의 localStorage에 <code>solsol-theme</code> 이름으로 저장할 수 있습니다. 방문 통계 허용·거부 선택은 <code>solsol-analytics-consent</code>에 저장합니다. 사용자는 브라우저 사이트 데이터 삭제 기능으로 언제든 지울 수 있습니다.</p>
     <h2>3. 접속 과정에서 생길 수 있는 기록</h2>
-    <p>정적 파일 제공과 보안 운영 과정에서 호스팅 사업자가 IP 주소, 요청 시각, 브라우저 종류 등 일반 접속 기록을 제한적으로 처리할 수 있습니다. 실제 운영 전 Cloudflare 계정 설정과 보존 정책을 다시 확인해 이 문서에 반영합니다.</p>
+    <p>정적 파일 제공과 보안 운영 과정에서 호스팅 사업자 Cloudflare가 IP 주소, 요청 시각, 브라우저 종류 등 일반 접속 기록을 제한적으로 처리할 수 있습니다.</p>
     <h2>4. 분석과 광고</h2>
-    <p>현재 버전에는 Google Analytics와 Google AdSense 코드를 넣지 않았습니다. 추후 도입할 경우 실제 수집 항목, 목적, 보관 기간, 거부 방법을 먼저 이 방침에 추가합니다.</p>
+    <p>솔솔계산소는 사용자가 통계 쿠키를 허용한 경우에만 Google Analytics 4(GA4)를 사용합니다. 서비스 개선을 위해 페이지 주소·제목·유입 경로·기기 및 브라우저 종류·방문과 사용 기록·쿠키 식별자가 Google에서 처리될 수 있습니다.</p>
+    <p>추가 이벤트는 계산기 종류, 계산 완료 여부, 고정된 오류 분류, 관련 계산기 이동만 기록합니다. 생년월일·날짜·금액·이자율·키·몸무게·로또 당첨금·계산 결과 숫자 등 계산기 입력값과 결과 원문은 GA4 이벤트로 보내지 않습니다. 이벤트 데이터 보관 기간은 2개월로 설정합니다.</p>
+    <p>Google AdSense는 현재 도입하지 않았습니다. 광고 도구를 도입하기 전에 실제 수집 항목과 거부 방법을 이 방침에 반영합니다.</p>
+    <p><a href="https://policies.google.com/privacy?hl=ko" rel="external noopener">구글 개인정보 처리방침 보기</a></p>
+    <button id="reset-analytics-consent" class="button secondary" type="button">통계 쿠키 선택 다시 하기</button>
     <h2>5. 문의</h2>
     <p>개인정보 관련 문의: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a></p>
     <h2>6. 변경 안내</h2>
@@ -21,3 +25,9 @@ import { siteConfig } from '../config';
   </section>
 </BaseLayout>
 
+<script>
+  type ConsentWindow = Window & { solsolResetAnalyticsConsent?: () => void };
+  document.querySelector<HTMLButtonElement>('#reset-analytics-consent')?.addEventListener('click', () => {
+    (window as ConsentWindow).solsolResetAnalyticsConsent?.();
+  });
+</script>

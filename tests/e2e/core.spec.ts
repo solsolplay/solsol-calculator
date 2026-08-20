@@ -1,5 +1,11 @@
 import { expect, test } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem('solsol-analytics-consent', 'denied');
+  });
+});
+
 test('홈에서 계산기 목록으로 이동한다', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: /복잡한 계산/ })).toBeVisible();
@@ -45,3 +51,39 @@ test('공개 계산기 12개 주소가 모두 열린다', async ({ page }) => {
   }
 });
 
+test('통계 동의 전에는 Google 태그를 불러오지 않는다', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => window.localStorage.removeItem('solsol-analytics-consent'));
+  await page.reload();
+
+  await expect(page.getByText('통계 쿠키를 허용할까요?')).toBeVisible();
+  await expect(page.locator('#google-analytics-script')).toHaveCount(0);
+});
+
+test('통계를 허용하면 계산 원문 없이 완료 이벤트를 보낸다', async ({ page }) => {
+  await page.route('https://www.googletagmanager.com/**', (route) => route.abort());
+  await page.goto('/calculators/age/');
+  await page.evaluate(() => window.localStorage.removeItem('solsol-analytics-consent'));
+  await page.reload();
+  await page.getByRole('button', { name: '통계 허용' }).click();
+
+  await expect(page.locator('#google-analytics-script')).toHaveAttribute('src', /G-WPSXDCLX98/);
+  await page.getByLabel('생년').fill('2000');
+  await page.getByLabel('생월').fill('8');
+  await page.getByLabel('생일').fill('21');
+  await page.getByLabel('기준일').fill('2026-08-20');
+  await page.getByRole('button', { name: '계산하기' }).click();
+
+  const events = await page.evaluate(() => {
+    const layer = (window as Window & { dataLayer?: IArguments[] }).dataLayer ?? [];
+    return layer
+      .map((entry) => Array.from(entry))
+      .filter((entry) => entry[0] === 'event');
+  });
+  const serializedEvents = JSON.stringify(events);
+  expect(serializedEvents).toContain('calculation_complete');
+  expect(serializedEvents).toContain('"calculator_id":"age"');
+  expect(serializedEvents).not.toContain('2000');
+  expect(serializedEvents).not.toContain('2026-08-20');
+  expect(serializedEvents).not.toContain('만 25세');
+});

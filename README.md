@@ -48,6 +48,10 @@ npx.cmd wrangler deploy
 
 외부 계정 연결 전에 [docs/USER_ACTIONS.md](docs/USER_ACTIONS.md)와 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)를 확인하세요.
 
+## 방문 통계
+
+GA4는 방문자가 통계 쿠키를 허용한 뒤에만 불러옵니다. 계산기에 입력한 생년월일·금액·키·몸무게와 계산 결과 숫자는 분석 이벤트로 전송하지 않습니다. 설정과 점검 방법은 [docs/ANALYTICS.md](docs/ANALYTICS.md)를 확인하세요.
+
 ## 직접 고치지 않는 폴더
 
 `node_modules`, `.astro`, `dist`는 설치·빌드할 때 자동으로 만들어집니다. 직접 편집하지 않습니다.

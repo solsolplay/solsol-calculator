@@ -2,11 +2,20 @@
 
 ## 이번 완성본에서 바뀐 곳
 
-- 홈: 낮에는 밝은 계산 정원, 밤에는 별빛 계산소가 자동으로 바뀝니다.
+- 홈: 첫 화면에서 마지막 안내 카드까지 밝은 계산 정원 또는 별빛 계산소 배경이 끊기지 않고 이어집니다.
 - 상단: 초안처럼 짙은 남색 메뉴, `낮/밤` 전환 버튼, 청록색 검색 버튼을 사용합니다.
-- 계산기 12개: 왼쪽에는 각 계산기의 캐릭터 이야기 장면, 오른쪽에는 실제 입력·결과가 표시됩니다.
+- 계산기 12개: 화면 전체에는 같은 솔솔 월드 낮·밤 배경, 왼쪽에는 각 계산기의 캐릭터 이야기 장면, 오른쪽에는 실제 입력·결과가 표시됩니다.
 - 계산기 카드: 단순 이모지 대신 각 장면의 작은 미리보기를 보여줍니다.
 - 모바일: 장면이 먼저 나오고 입력·결과가 아래에 한 줄로 이어집니다.
+
+## 화면 전체 낮·밤 배경
+
+- 낮: `public/images/backgrounds/solsol-world-day.webp`
+- 밤: `public/images/backgrounds/solsol-world-night.webp`
+- 연결 위치: `src/styles/global.css`의 `.page-world .site-main`
+- 적용 페이지: 홈과 `/calculators/` 아래 모든 계산기 주소
+
+배경은 스크롤 중에도 화면을 가득 채우며, 실제 제목·입력창·버튼·결과는 반투명 카드 위의 HTML로 유지됩니다. 따라서 배경 속 작은 그림이 계산 기능이나 한글을 대신하지 않습니다.
 
 ## 계산기와 그림 파일 연결
 
@@ -38,9 +47,9 @@
 
 새 파일명을 쓰고 싶다면 `src/data/calculators.ts`에서 해당 계산기의 `scene` 값도 함께 고칩니다. 초안 화면 전체를 그대로 배경으로 쓰지 말고, 장면은 그림으로 사용하며 입력창·버튼·결과는 실제 HTML로 유지해야 휴대폰·검색·접근성·계산 기능이 정상입니다.
 
-## 낮·밤 홈 그림 교체
+## 낮·밤 전체 배경 교체
 
-- 낮: `public/images/mascots/solsol-zodiac-day.webp`
-- 밤: `public/images/mascots/solsol-zodiac-night.webp`
+- 낮: `public/images/backgrounds/solsol-world-day.webp`
+- 밤: `public/images/backgrounds/solsol-world-night.webp`
 
-같은 이름으로 교체하면 `src/pages/index.astro`를 고치지 않아도 됩니다.
+같은 이름으로 교체하면 코드를 고치지 않아도 됩니다. 권장 비율은 `16:9`, 권장 크기는 `1672×941` 이상이며 글자·버튼·로고를 이미지 안에 넣지 않습니다.

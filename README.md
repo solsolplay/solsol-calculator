@@ -2,7 +2,7 @@
 
 생활에 필요한 계산을 친근하게 풀어주는 Astro 정적 사이트입니다. 모든 일반 계산은 사용자의 브라우저 안에서 처리되며, 12개 계산기가 각각 고유 주소를 가집니다.
 
-홈의 낮·밤 12지신 장면과 계산기마다 다른 캐릭터 이야기 장면을 사용하되, 입력창·결과·링크는 실제 HTML로 구현해 초안의 귀여움과 사이트 기능을 함께 유지합니다. 이미지 교체표는 [docs/DESIGN_THEME.md](docs/DESIGN_THEME.md), 완료·검사 결과는 [docs/COMPLETION_REPORT.md](docs/COMPLETION_REPORT.md)에 있습니다.
+홈과 모든 계산기 화면 전체에 이어지는 낮·밤 12지신 배경과 계산기마다 다른 캐릭터 이야기 장면을 사용하되, 입력창·결과·링크는 실제 HTML로 구현해 초안의 귀여움과 사이트 기능을 함께 유지합니다. 이미지 교체표는 [docs/DESIGN_THEME.md](docs/DESIGN_THEME.md), 완료·검사 결과는 [docs/COMPLETION_REPORT.md](docs/COMPLETION_REPORT.md)에 있습니다.
 
 ## 포함된 계산기
 

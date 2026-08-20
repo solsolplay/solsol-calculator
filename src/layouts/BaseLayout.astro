@@ -26,6 +26,9 @@ const defaultSchema = {
   url: siteConfig.url,
   description: siteConfig.description,
 };
+const isHome = Astro.url.pathname === '/';
+const isCalculator = Astro.url.pathname.startsWith('/calculators/');
+const pageClass = isHome ? 'page-home page-world' : isCalculator ? 'page-calculator page-world' : undefined;
 ---
 
 <!doctype html>
@@ -47,10 +50,10 @@ const defaultSchema = {
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={`${siteConfig.url}/images/mascots/solsol-zodiac-day.webp`} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="800" />
-    <meta property="og:image:alt" content="계산 정원에 모인 솔솔계산소 12지신 도우미" />
+    <meta property="og:image" content={`${siteConfig.url}/images/backgrounds/solsol-world-day.webp`} />
+    <meta property="og:image:width" content="1672" />
+    <meta property="og:image:height" content="941" />
+    <meta property="og:image:alt" content="밝은 계산 정원에 모인 솔솔계산소 12지신 도우미" />
     <meta name="twitter:card" content="summary_large_image" />
     <title>{fullTitle}</title>
     <script is:inline>
@@ -66,7 +69,7 @@ const defaultSchema = {
     </script>
     <script is:inline type="application/ld+json" set:html={JSON.stringify(schema ?? defaultSchema)}></script>
   </head>
-  <body>
+  <body class={pageClass}>
     <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
     <SiteHeader currentPath={Astro.url.pathname} />
     <main id="main-content" class="site-main">

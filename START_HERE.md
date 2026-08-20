@@ -49,7 +49,7 @@ npm.cmd run dev
 
 ## 공개 전에 꼭 확인할 한 가지
 
-`src/config.ts`에 적힌 `contact@solsolplay.com` 메일을 실제로 받을 수 있는지 확인하세요. 아직 만든 메일이 아니라면 본인이 받을 수 있는 주소로 바꾼 뒤 저장합니다.
+`src/config.ts`의 운영 이메일은 `steadygo0531@gmail.com`으로 설정되어 있습니다. 문의 메일을 받을 주소를 나중에 바꾸려면 이 값을 수정한 뒤 저장합니다.
 
 GitHub·Cloudflare·가비아·Search Console·AdSense처럼 로그인이 필요한 단계는 `docs/USER_ACTIONS.md`와 `docs/DEPLOYMENT.md`에 이어서 정리해 두었습니다.
 

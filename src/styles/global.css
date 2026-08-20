@@ -110,7 +110,7 @@ h3 {
   min-height: calc(100vh - var(--header-height) - 220px);
 }
 
-/* 홈과 계산기 화면 전체에 이어지는 솔솔 월드 배경 */
+/* 홈·계산기·정보 화면 전체에 이어지는 솔솔 월드 배경 */
 .page-world .site-main {
   background-color: #eef8ef;
   background-image:
@@ -137,6 +137,41 @@ html[data-theme='night'] .page-world .site-main {
 
 .page-world .calculator-card {
   background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+
+/* 소개·문의·개인정보·약관은 배경 캐릭터를 살리면서 본문을 읽기 쉽게 표시 */
+.page-info .site-main {
+  padding-top: clamp(20px, 4vw, 52px);
+  padding-bottom: clamp(48px, 8vw, 96px);
+}
+
+.page-info .page-hero {
+  padding: clamp(26px, 5vw, 48px);
+  border: 1px solid color-mix(in srgb, var(--border-strong) 78%, transparent);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(16px) saturate(1.08);
+}
+
+.page-info .page-hero .lead {
+  color: var(--text);
+}
+
+.page-info .content-card {
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(18px) saturate(1.08);
+}
+
+.page-info .section {
+  padding-top: clamp(24px, 5vw, 52px);
+  padding-bottom: 0;
+}
+
+html[data-theme='night'] .page-info .page-hero,
+html[data-theme='night'] .page-info .content-card {
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
 }
 
 .eyebrow {
@@ -295,6 +330,15 @@ button.button:hover {
 
   .page-world .site-main {
     background-position: 65% top;
+  }
+
+  .page-info .site-main {
+    padding-top: 16px;
+  }
+
+  .page-info .page-hero {
+    padding: 24px 20px;
+    border-radius: var(--radius-md);
   }
 }
 

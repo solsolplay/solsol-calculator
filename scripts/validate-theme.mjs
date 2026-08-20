@@ -8,6 +8,8 @@ const builtBackgroundsDir = join(root, 'dist', 'images', 'backgrounds');
 const calculatorDist = join(root, 'dist', 'calculators');
 const homeHtml = join(root, 'dist', 'index.html');
 const globalCss = join(root, 'src', 'styles', 'global.css');
+const infoPageNames = ['about', 'contact', 'privacy', 'terms'];
+const contactEmail = 'steadygo0531@gmail.com';
 
 const fail = (message) => {
   console.error(`테마 검사 실패: ${message}`);
@@ -47,4 +49,18 @@ const home = readFileSync(homeHtml, 'utf8');
 if (!home.includes('page-home page-world')) fail('홈에 전체 화면 배경 클래스가 없습니다.');
 if (!home.includes('solsol-world-day.webp')) fail('홈의 공유 이미지가 새 낮 배경을 사용하지 않습니다.');
 
-console.log('테마 검사 통과: 전체 화면 낮·밤 배경, 계산기 장면 12개, 입력 폼 12개 정상');
+for (const name of infoPageNames) {
+  const page = join(root, 'dist', name, 'index.html');
+  if (!existsSync(page)) fail(`${name} 정보 페이지 빌드 결과가 없습니다.`);
+  const html = readFileSync(page, 'utf8');
+  if (!html.includes('page-info page-world')) fail(`${name} 정보 페이지에 전체 화면 배경 클래스가 없습니다.`);
+  if (!html.includes('content-card')) fail(`${name} 정보 페이지에 가독성 카드가 없습니다.`);
+}
+
+for (const name of ['contact', 'privacy']) {
+  const html = readFileSync(join(root, 'dist', name, 'index.html'), 'utf8');
+  if (!html.includes(contactEmail)) fail(`${name} 페이지의 운영 이메일이 ${contactEmail}이 아닙니다.`);
+  if (html.includes('contact@solsolplay.com')) fail(`${name} 페이지에 이전 운영 이메일이 남아 있습니다.`);
+}
+
+console.log('테마 검사 통과: 낮·밤 배경(홈·계산기·정보 4페이지), 계산기 장면 12개, 입력 폼 12개, 운영 이메일 정상');

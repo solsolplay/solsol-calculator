@@ -110,6 +110,35 @@ h3 {
   min-height: calc(100vh - var(--header-height) - 220px);
 }
 
+/* 홈과 계산기 화면 전체에 이어지는 솔솔 월드 배경 */
+.page-world .site-main {
+  background-color: #eef8ef;
+  background-image:
+    linear-gradient(180deg, rgba(255, 250, 240, 0.08) 0%, rgba(255, 250, 240, 0.26) 48%, rgba(255, 250, 240, 0.58) 100%),
+    url('/images/backgrounds/solsol-world-day.webp');
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+html[data-theme='night'] .page-world .site-main {
+  background-color: #040f24;
+  background-image:
+    linear-gradient(180deg, rgba(2, 10, 30, 0.04) 0%, rgba(2, 10, 30, 0.32) 48%, rgba(2, 10, 30, 0.66) 100%),
+    url('/images/backgrounds/solsol-world-night.webp');
+}
+
+.page-world .calculator-card,
+.page-world .category-grid a,
+.page-world .guide-card {
+  backdrop-filter: blur(12px);
+}
+
+.page-world .calculator-card {
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+
 .eyebrow {
   margin-bottom: 8px;
   color: var(--primary-strong);
@@ -263,6 +292,10 @@ button.button:hover {
   .page-hero {
     padding-top: 42px;
   }
+
+  .page-world .site-main {
+    background-position: 65% top;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -279,4 +312,3 @@ button.button:hover {
     scroll-behavior: auto !important;
   }
 }
-

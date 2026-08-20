@@ -2,6 +2,8 @@
 
 | 파일 | 용도 | 제작 방식 | 권리·주의 | 버전 |
 |---|---|---|---|---|
+| `public/images/backgrounds/solsol-world-day.webp` | 홈·계산기 전체 낮 배경 | 제공된 12지신 캐릭터를 기준으로 솔솔계산소 전용 AI 생성·WebP 최적화 | UI·글자·로고가 없는 배경 전용. 12지신을 상단 오른쪽과 하단의 옅은 장면에 배치 | 2 |
+| `public/images/backgrounds/solsol-world-night.webp` | 홈·계산기 전체 밤 배경 | 낮 구도를 유지한 밤 장면 변형·WebP 최적화 | 낮과 같은 배치, 별·달·등불 조명만 변경 | 2 |
 | `public/images/mascots/solsol-zodiac-day.webp` | 홈 낮 대표 그림 | 솔솔계산소 전용 AI 생성·WebP 최적화 | 12동물 전부 포함. 기존 캐릭터·ChatGPT 로고·타 사이트 UI를 복제하지 않음 | 1 |
 | `public/images/mascots/solsol-zodiac-night.webp` | 홈 밤 대표 그림 | 낮 구도의 조명·배경 변형 후 WebP 최적화 | 12동물·포즈·소품 유지, 밤 정원 조명만 변경 | 1 |
 | `public/images/scenes/reference-age.webp` | 나이 계산기 장면 | 사용자가 제공한 솔솔계산소 초안의 왼쪽 장면을 반응형으로 표시 | 원본 초안의 실제 UI 부분은 계산 기능으로 새로 구현하고 장면만 배경으로 사용 | 1 |

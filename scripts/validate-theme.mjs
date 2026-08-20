@@ -1,7 +1,8 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const scenesDir = join(root, 'public', 'images', 'scenes');
 const backgroundsDir = join(root, 'public', 'images', 'backgrounds');
 const builtBackgroundsDir = join(root, 'dist', 'images', 'backgrounds');

@@ -1,9 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => {
-    window.localStorage.setItem('solsol-analytics-consent', 'denied');
-  });
+test.beforeEach(async ({ page }, testInfo) => {
+  if (!testInfo.title.includes('통계')) {
+    await page.addInitScript(() => {
+      window.localStorage.setItem('solsol-analytics-consent', 'denied');
+    });
+  }
 });
 
 test('홈에서 계산기 목록으로 이동한다', async ({ page }) => {
@@ -37,7 +39,7 @@ test('낮과 밤 테마 선택을 기억한다', async ({ page }) => {
 
 test('검색어로 계산기 목록을 줄인다', async ({ page }) => {
   await page.goto('/calculators/');
-  await page.getByLabel('계산기 검색').fill('배당');
+  await page.getByRole('searchbox', { name: '계산기 검색' }).fill('배당');
   await expect(page.locator('[data-calculator-card]:visible')).toHaveCount(1);
   await expect(page.getByRole('link', { name: /배당금 계산기/ })).toBeVisible();
 });
@@ -47,7 +49,7 @@ test('공개 계산기 12개 주소가 모두 열린다', async ({ page }) => {
   for (const route of routes) {
     const response = await page.goto(`/calculators/${route}/`);
     expect(response?.status(), route).toBe(200);
-    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('#main-content h1').first()).toBeVisible();
   }
 });
 
@@ -56,7 +58,7 @@ test('통계 동의 전에는 Google 태그를 불러오지 않는다', async ({
   await page.evaluate(() => window.localStorage.removeItem('solsol-analytics-consent'));
   await page.reload();
 
-  await expect(page.getByText('통계 쿠키를 허용할까요?')).toBeVisible();
+  await expect(page.locator('#analytics-consent')).toBeVisible();
   await expect(page.locator('#google-analytics-script')).toHaveCount(0);
 });
 
@@ -65,7 +67,10 @@ test('통계를 허용하면 계산 원문 없이 완료 이벤트를 보낸다'
   await page.goto('/calculators/age/');
   await page.evaluate(() => window.localStorage.removeItem('solsol-analytics-consent'));
   await page.reload();
-  await page.getByRole('button', { name: '통계 허용' }).click();
+  await page
+  .locator('#analytics-consent')
+  .getByRole('button', { name: '통계 허용' })
+  .click();
 
   await expect(page.locator('#google-analytics-script')).toHaveAttribute('src', /G-WPSXDCLX98/);
   await page.getByLabel('생년').fill('2000');
@@ -73,6 +78,21 @@ test('통계를 허용하면 계산 원문 없이 완료 이벤트를 보낸다'
   await page.getByLabel('생일').fill('21');
   await page.getByLabel('기준일').fill('2026-08-20');
   await page.getByRole('button', { name: '계산하기' }).click();
+
+  await expect(page.getByTestId('age-result')).toHaveText('만 25세');
+
+await page.waitForFunction(() => {
+  const layer = (window as Window & { dataLayer?: IArguments[] }).dataLayer ?? [];
+
+  return layer.some((entry) => {
+    const values = Array.from(entry);
+
+    return (
+      values[0] === 'event' &&
+      values[1] === 'calculation_complete'
+    );
+  });
+});
 
   const events = await page.evaluate(() => {
     const layer = (window as Window & { dataLayer?: IArguments[] }).dataLayer ?? [];

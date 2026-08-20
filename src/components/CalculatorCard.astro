@@ -5,7 +5,9 @@ const { item, compact = false } = Astro.props;
 ---
 
 <a class:list={['calculator-card', `accent-${item.accent}`, { compact }]} href={item.path} data-calculator-card data-search={`${item.name} ${item.summary} ${item.category}`}>
-  <span class="card-icon" aria-hidden="true">{item.icon}</span>
+  <span class:list={['card-scene', { 'card-scene--reference': item.sceneKind === 'reference' }]} style={`background-image: url('${item.scene}')`} aria-hidden="true">
+    <span class="card-icon">{item.icon}</span>
+  </span>
   <span class="card-copy">
     <strong>{item.shortName}</strong>
     <span>{item.summary}</span>
@@ -18,7 +20,7 @@ const { item, compact = false } = Astro.props;
     --accent: var(--primary);
     position: relative;
     display: grid;
-    grid-template-columns: 58px 1fr auto;
+    grid-template-columns: 86px 1fr auto;
     gap: 14px;
     min-height: 124px;
     align-items: center;
@@ -53,14 +55,36 @@ const { item, compact = false } = Astro.props;
   .accent-violet { --accent: var(--violet); }
   .accent-green { --accent: var(--green); }
 
+  .card-scene {
+    position: relative;
+    width: 86px;
+    aspect-ratio: 1.12;
+    border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+    border-radius: 18px;
+    background-color: var(--bg-soft);
+    background-position: center;
+    background-size: cover;
+    box-shadow: inset 0 -22px 28px -22px rgba(3, 18, 36, 0.65);
+  }
+
+  .card-scene--reference {
+    background-position: 8% 42%;
+    background-size: 265% auto;
+  }
+
   .card-icon {
+    position: absolute;
+    right: -7px;
+    bottom: -8px;
     display: grid;
-    width: 58px;
+    width: 34px;
     aspect-ratio: 1;
     place-items: center;
-    border-radius: 18px;
-    background: color-mix(in srgb, var(--accent) 17%, var(--surface));
-    font-size: 1.9rem;
+    border: 2px solid var(--surface);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent) 23%, var(--surface));
+    box-shadow: var(--shadow-sm);
+    font-size: 1.15rem;
   }
 
   .card-copy {
@@ -86,9 +110,14 @@ const { item, compact = false } = Astro.props;
 
   .compact {
     min-height: 104px;
-    grid-template-columns: 48px 1fr auto;
+    grid-template-columns: 72px 1fr auto;
   }
 
-  .compact .card-icon { width: 48px; border-radius: 15px; font-size: 1.55rem; }
-</style>
+  .compact .card-scene { width: 72px; border-radius: 15px; }
+  .compact .card-icon { width: 30px; font-size: 1rem; }
 
+  @media (max-width: 440px) {
+    .calculator-card { grid-template-columns: 72px 1fr auto; padding: 14px; }
+    .card-scene { width: 72px; }
+  }
+</style>

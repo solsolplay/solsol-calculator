@@ -12,8 +12,8 @@ const newItems = publicCalculators.slice(6, 12);
     <div class="container hero-grid">
       <div class="hero-copy">
         <p class="eyebrow">필요한 계산을 한곳에서</p>
-        <h1>복잡한 계산,<br /><span>솔솔 풀어드려요</span></h1>
-        <p class="hero-lead">회원가입 없이 숫자를 입력하면 바로 결과와 계산 근거를 확인할 수 있어요.</p>
+        <h1>복잡한 계산,<br /><span>10초면 끝</span></h1>
+        <p class="hero-lead">생년월일·투자금·건강 정보를 입력하면 솔솔계산소 캐릭터가 결과와 근거를 바로 보여드려요.</p>
         <form class="hero-search" action="/calculators/" method="get" role="search">
           <label class="visually-hidden" for="home-search">필요한 계산기 검색</label>
           <span aria-hidden="true">⌕</span>
@@ -123,4 +123,96 @@ const newItems = publicCalculators.slice(6, 12);
   .guide-card p { color: var(--text-soft); }
   @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; } .hero-art { min-height: 330px; order: -1; } .category-grid { grid-template-columns: repeat(2, 1fr); } .guide-card { grid-template-columns: 1fr; } }
   @media (max-width: 650px) { .hero-art { min-height: 255px; } .hero-search { grid-template-columns: auto 1fr; } .hero-search button { grid-column: 1 / -1; width: 100%; } .trust-grid { grid-template-columns: 1fr; } .category-grid { grid-template-columns: 1fr; } .category-grid a { min-height: 170px; } }
+
+  /* 초안의 12지신 판타지 홈 테마 */
+  .hero {
+    position: relative;
+    min-height: 620px;
+    padding: 78px 0 62px;
+    overflow: hidden;
+    color: #071a38;
+    background:
+      linear-gradient(90deg, rgba(255, 254, 247, 0.98) 0%, rgba(255, 254, 247, 0.93) 34%, rgba(255, 254, 247, 0.28) 58%, rgba(255, 254, 247, 0.02) 78%),
+      url('/images/mascots/solsol-zodiac-day.webp') 68% center / cover no-repeat;
+    border-bottom: 1px solid #cbe6df;
+  }
+
+  .hero::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 72%, color-mix(in srgb, var(--bg) 86%, transparent));
+    content: '';
+  }
+
+  .hero-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    min-height: 480px;
+    grid-template-columns: minmax(0, 690px);
+    align-content: center;
+  }
+
+  .hero-copy {
+    padding: clamp(24px, 4vw, 40px);
+    border: 1px solid rgba(118, 177, 171, 0.58);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 22px 60px rgba(26, 67, 83, 0.16);
+    backdrop-filter: blur(13px);
+  }
+
+  .hero-copy h1 { font-size: clamp(2.7rem, 6vw, 5rem); }
+  .hero-copy h1 span { color: #008e87; }
+  .hero-copy .eyebrow { color: #087f78; }
+  .hero-lead { color: #34465f; }
+  .hero-art { display: none; }
+
+  :global(html[data-theme='night']) .hero {
+    color: #f7fbff;
+    background:
+      linear-gradient(90deg, rgba(2, 10, 31, 0.98) 0%, rgba(2, 10, 31, 0.92) 34%, rgba(2, 10, 31, 0.32) 60%, rgba(2, 10, 31, 0.04) 82%),
+      url('/images/mascots/solsol-zodiac-night.webp') 68% center / cover no-repeat;
+    border-bottom-color: #1f4861;
+  }
+
+  :global(html[data-theme='night']) .hero-copy {
+    border-color: rgba(76, 224, 211, 0.28);
+    background: rgba(4, 18, 47, 0.76);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.36);
+  }
+
+  :global(html[data-theme='night']) .hero-copy h1 span,
+  :global(html[data-theme='night']) .hero-copy .eyebrow { color: #61eadf; }
+  :global(html[data-theme='night']) .hero-lead { color: #d7e5f4; }
+
+  .popular-section {
+    padding-top: 54px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--bg-soft) 66%, transparent), transparent);
+  }
+
+  .category-grid a:nth-child(1) { background: linear-gradient(145deg, color-mix(in srgb, #5dd8c9 18%, var(--surface)), var(--surface)); }
+  .category-grid a:nth-child(2) { background: linear-gradient(145deg, color-mix(in srgb, #6aa8ff 18%, var(--surface)), var(--surface)); }
+  .category-grid a:nth-child(3) { background: linear-gradient(145deg, color-mix(in srgb, #7dd39a 18%, var(--surface)), var(--surface)); }
+  .category-grid a:nth-child(4) { background: linear-gradient(145deg, color-mix(in srgb, #ff83b4 16%, var(--surface)), var(--surface)); }
+
+  @media (max-width: 980px) {
+    .hero {
+      min-height: auto;
+      padding: 390px 0 50px;
+      background-position: center top;
+      background-size: auto 440px;
+      background-color: var(--bg);
+    }
+
+    .hero-grid { min-height: auto; }
+    .hero-copy { width: min(100%, 720px); margin-inline: auto; }
+  }
+
+  @media (max-width: 650px) {
+    .hero { padding: 282px 0 34px; background-size: auto 320px; }
+    .hero-copy { padding: 22px; border-radius: 22px; }
+    .hero-copy h1 { font-size: clamp(2.2rem, 12vw, 3.25rem); }
+  }
 </style>

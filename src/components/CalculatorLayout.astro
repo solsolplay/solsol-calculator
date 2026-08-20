@@ -56,9 +56,17 @@ const schema = [
       </div>
     </header>
 
-    <div class="calculator-workspace">
-      <slot name="form" />
-      <slot name="result" />
+    <div class:list={['calculator-stage', `accent-${calculator.accent}`]}>
+      <figure class:list={['calculator-scene', { 'calculator-scene--reference': calculator.sceneKind === 'reference' }]}>
+        <img src={calculator.scene} width="1536" height="1024" alt={calculator.sceneAlt} loading="eager" fetchpriority="high" />
+        <div class="scene-sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>⋆</span></div>
+        <figcaption><span aria-hidden="true">{calculator.icon}</span>{calculator.sceneCaption}</figcaption>
+      </figure>
+
+      <div class="calculator-workspace">
+        <slot name="form" />
+        <slot name="result" />
+      </div>
     </div>
 
     <ResultEvidence formula={formula} example={example} caveats={caveats} sources={sources} version={version} />

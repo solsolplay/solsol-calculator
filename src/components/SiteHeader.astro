@@ -4,9 +4,9 @@ type Props = { currentPath: string };
 const { currentPath } = Astro.props;
 const nav = [
   { name: '전체 계산기', path: '/calculators/' },
-  { name: '돈', path: '/categories/money/' },
-  { name: '날짜', path: '/categories/date-time/' },
-  { name: '건강·생활', path: '/categories/health-life/' },
+  { name: '금융', path: '/categories/money/' },
+  { name: '생활', path: '/categories/date-time/' },
+  { name: '건강', path: '/categories/health-life/' },
   { name: '재미', path: '/categories/fun/' },
 ];
 const active = (path: string) => currentPath === path || currentPath.startsWith(path);
@@ -24,8 +24,8 @@ const active = (path: string) => currentPath === path || currentPath.startsWith(
       ))}
     </nav>
     <div class="header-actions">
-      <a class="search-link" href="/calculators/#calculator-search" aria-label="계산기 검색">⌕</a>
       <ThemeToggle />
+      <a class="search-link" href="/calculators/#calculator-search" aria-label="계산기 검색">⌕</a>
       <details class="mobile-menu">
         <summary aria-label="메뉴 열기"><span></span><span></span><span></span></summary>
         <nav aria-label="모바일 메뉴">
@@ -42,8 +42,8 @@ const active = (path: string) => currentPath === path || currentPath.startsWith(
     z-index: 100;
     top: 0;
     min-height: var(--header-height);
-    border-bottom: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
-    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    border-bottom: 1px solid rgba(109, 180, 213, 0.24);
+    background: rgba(4, 18, 45, 0.96);
     backdrop-filter: blur(16px);
   }
 
@@ -60,7 +60,7 @@ const active = (path: string) => currentPath === path || currentPath.startsWith(
     flex: 0 0 auto;
     align-items: center;
     gap: 10px;
-    color: var(--text);
+    color: white;
     font-size: 1.18rem;
     font-weight: 900;
     letter-spacing: -0.04em;
@@ -80,7 +80,7 @@ const active = (path: string) => currentPath === path || currentPath.startsWith(
     place-items: center;
     border-radius: 4px;
     color: white;
-    background: var(--primary);
+    background: linear-gradient(145deg, #17cabe, #078a9d);
     font-size: 0.66rem;
     line-height: 1;
   }
@@ -95,7 +95,7 @@ const active = (path: string) => currentPath === path || currentPath.startsWith(
   .desktop-nav a {
     position: relative;
     padding-block: 10px;
-    color: var(--text-soft);
+    color: #d9e5f5;
     font-size: 0.95rem;
     font-weight: 750;
     text-decoration: none;
@@ -103,7 +103,7 @@ const active = (path: string) => currentPath === path || currentPath.startsWith(
 
   .desktop-nav a:hover,
   .desktop-nav a[aria-current='page'] {
-    color: var(--primary-strong);
+    color: #6ff4e7;
   }
 
   .desktop-nav a[aria-current='page']::after {
@@ -113,7 +113,7 @@ const active = (path: string) => currentPath === path || currentPath.startsWith(
     left: 0;
     height: 3px;
     border-radius: 2px;
-    background: var(--primary);
+    background: #31d4c6;
     content: '';
   }
 
@@ -129,11 +129,11 @@ const active = (path: string) => currentPath === path || currentPath.startsWith(
     width: 46px;
     height: 46px;
     place-items: center;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(115, 244, 231, 0.62);
     border-radius: 50%;
-    color: var(--text);
-    background: var(--surface);
-    box-shadow: var(--shadow-sm);
+    color: white;
+    background: linear-gradient(145deg, #068f98, #056a7e);
+    box-shadow: 0 8px 22px rgba(0, 169, 173, 0.26);
     font-size: 1.65rem;
     font-weight: 700;
     text-decoration: none;
@@ -151,15 +151,15 @@ const active = (path: string) => currentPath === path || currentPath.startsWith(
     padding: 11px;
     place-content: center;
     gap: 5px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
-    background: var(--surface);
+    background: #142748;
     cursor: pointer;
     list-style: none;
   }
 
   .mobile-menu summary::-webkit-details-marker { display: none; }
-  .mobile-menu summary span { width: 20px; height: 2px; border-radius: 2px; background: var(--text); }
+  .mobile-menu summary span { width: 20px; height: 2px; border-radius: 2px; background: white; }
   .mobile-menu nav {
     position: absolute;
     top: 54px;

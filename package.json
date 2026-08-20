@@ -15,7 +15,8 @@
     "test:e2e:desktop": "playwright test --project=desktop-chromium",
     "typecheck": "astro check",
     "validate:build": "node scripts/validate-build.mjs",
-    "check": "npm run typecheck && npm run test && npm run build && npm run validate:build",
+    "validate:theme": "node scripts/validate-theme.mjs",
+    "check": "npm run typecheck && npm run test && npm run build && npm run validate:build && npm run validate:theme",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {

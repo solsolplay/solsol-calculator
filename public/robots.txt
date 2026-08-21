@@ -3,3 +3,5 @@ Allow: /
 
 Sitemap: https://solsolplay.com/sitemap-index.xml
 
+#DaumWebMasterTool:a09c76bb5c75bc21be205e62ed61cb6c8151b11a1a4be73a57689453de30c425:KZhfbUJ/ETlidY5iVkFhig==
+

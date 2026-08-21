@@ -3,6 +3,8 @@ export type CategoryId = 'money' | 'date-time' | 'health-life' | 'fun';
 export type CalculatorItem = {
   id: string;
   name: string;
+  seoTitle: string;
+  labName: string;
   shortName: string;
   path: string;
   category: CategoryId;
@@ -55,6 +57,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'age',
     name: '만 나이 계산기',
+    seoTitle: '만 나이 계산기 (한국나이연구소)',
+    labName: '한국나이연구소',
     shortName: '나이 계산기',
     path: '/calculators/age/',
     category: 'date-time',
@@ -74,6 +78,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'dividend',
     name: '배당금 계산기',
+    seoTitle: '배당금 계산기 (배당금연구소)',
+    labName: '배당금연구소',
     shortName: '배당금 계산기',
     path: '/calculators/dividend/',
     category: 'money',
@@ -93,6 +99,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'lotto-prize',
     name: '로또 당첨금 실수령액 계산기',
+    seoTitle: '로또 당첨금 계산기 (로또연구소)',
+    labName: '로또연구소',
     shortName: '로또 계산기',
     path: '/calculators/lotto-prize/',
     category: 'fun',
@@ -112,6 +120,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'loan-interest',
     name: '대출 이자 계산기',
+    seoTitle: '대출 이자 계산기 (대출이자연구소)',
+    labName: '대출이자연구소',
     shortName: '대출 계산기',
     path: '/calculators/loan-interest/',
     category: 'money',
@@ -131,6 +141,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'bmi',
     name: 'BMI 계산기',
+    seoTitle: 'BMI 계산기 (BMI연구소)',
+    labName: 'BMI연구소',
     shortName: 'BMI 계산기',
     path: '/calculators/bmi/',
     category: 'health-life',
@@ -150,6 +162,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'date-difference',
     name: '날짜 차이 계산기',
+    seoTitle: '날짜 차이 계산기 (날짜연구소)',
+    labName: '날짜연구소',
     shortName: '날짜 계산기',
     path: '/calculators/date-difference/',
     category: 'date-time',
@@ -169,6 +183,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'percentage',
     name: '퍼센트 계산기',
+    seoTitle: '퍼센트 계산기 (퍼센트연구소)',
+    labName: '퍼센트연구소',
     shortName: '퍼센트 계산기',
     path: '/calculators/percentage/',
     category: 'fun',
@@ -187,6 +203,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'discount',
     name: '할인율 계산기',
+    seoTitle: '할인율 계산기 (할인연구소)',
+    labName: '할인연구소',
     shortName: '할인 계산기',
     path: '/calculators/discount/',
     category: 'money',
@@ -205,6 +223,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'compound-interest',
     name: '복리 계산기',
+    seoTitle: '복리 계산기 (복리연구소)',
+    labName: '복리연구소',
     shortName: '복리 계산기',
     path: '/calculators/compound-interest/',
     category: 'money',
@@ -223,6 +243,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'savings',
     name: '적금 이자 계산기',
+    seoTitle: '적금 이자 계산기 (적금연구소)',
+    labName: '적금연구소',
     shortName: '적금 계산기',
     path: '/calculators/savings/',
     category: 'money',
@@ -241,6 +263,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'd-day',
     name: 'D-day 계산기',
+    seoTitle: 'D-day 계산기 (디데이연구소)',
+    labName: '디데이연구소',
     shortName: 'D-day 계산기',
     path: '/calculators/d-day/',
     category: 'date-time',
@@ -259,6 +283,8 @@ export const calculators: CalculatorItem[] = [
   {
     id: 'unit-converter',
     name: '생활 단위 변환기',
+    seoTitle: '단위 변환기 (단위변환연구소)',
+    labName: '단위변환연구소',
     shortName: '단위 변환기',
     path: '/calculators/unit-converter/',
     category: 'health-life',

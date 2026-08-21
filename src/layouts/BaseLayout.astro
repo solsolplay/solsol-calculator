@@ -9,6 +9,7 @@ type Props = {
   title?: string;
   description?: string;
   noindex?: boolean;
+  exactTitle?: boolean;
   schema?: Record<string, unknown> | Record<string, unknown>[];
 };
 
@@ -16,14 +17,16 @@ const {
   title = siteConfig.name,
   description = siteConfig.description,
   noindex = false,
+  exactTitle = false,
   schema,
 } = Astro.props;
-const fullTitle = title === siteConfig.name ? title : `${title} | ${siteConfig.name}`;
+const fullTitle = (exactTitle || title === siteConfig.name) ? title : `${title} | ${siteConfig.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? siteConfig.url).href;
 const defaultSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: siteConfig.name,
+  name: siteConfig.searchName,
+  alternateName: siteConfig.name,
   url: siteConfig.url,
   description: siteConfig.description,
 };
@@ -56,7 +59,7 @@ const pageClass = isHome
     <meta name="theme-color" content="#079b91" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ko_KR" />
-    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:site_name" content={siteConfig.searchName} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />

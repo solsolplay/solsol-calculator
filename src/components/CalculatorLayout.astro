@@ -21,7 +21,8 @@ const schema = [
   {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: calculator.name,
+    name: calculator.seoTitle,
+    alternateName: calculator.name,
     description: calculator.summary,
     applicationCategory: 'UtilitiesApplication',
     operatingSystem: 'Any',
@@ -40,7 +41,7 @@ const schema = [
 ];
 ---
 
-<BaseLayout title={calculator.name} description={`${calculator.summary} ${calculator.detail}`} schema={schema}>
+<BaseLayout title={calculator.seoTitle} exactTitle description={`${calculator.summary} ${calculator.detail}`} schema={schema}>
   <div class="container calculator-page-shell" data-calculator-id={calculator.id}>
     <nav class="breadcrumb" aria-label="현재 위치">
       <a href="/">홈</a><span aria-hidden="true">›</span>
@@ -50,7 +51,7 @@ const schema = [
     <header class="calculator-heading">
       <div class="calculator-mascot" aria-hidden="true">{calculator.icon}</div>
       <div>
-        <p class="eyebrow">{calculator.mascot}가 도와드려요</p>
+        <p class="eyebrow">{calculator.labName} · {calculator.mascot}가 도와드려요</p>
         <h1>{calculator.name}</h1>
         <p>{calculator.detail}</p>
       </div>

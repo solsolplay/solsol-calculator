@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
 import CalculatorCard from '../components/CalculatorCard.astro';
 import { categories, publicCalculators } from '../data/calculators';
 
@@ -7,11 +8,11 @@ const popular = publicCalculators.filter((item) => item.popular).slice(0, 6);
 const newItems = publicCalculators.slice(6, 12);
 ---
 
-<BaseLayout title="솔솔계산소" description="나이·배당금·로또·대출·BMI·날짜·퍼센트 등 생활에 필요한 무료 계산기를 한곳에서 이용하세요.">
+<BaseLayout title={siteConfig.searchName} exactTitle description="나이·배당금·로또·대출·BMI·날짜·퍼센트 등 생활에 필요한 무료 계산기를 한곳에서 이용하세요.">
   <section class="hero">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow">필요한 계산을 한곳에서</p>
+        <p class="eyebrow">계산기연구소 · 필요한 계산을 한곳에서</p>
         <h1>복잡한 계산,<br /><span>10초면 끝</span></h1>
         <p class="hero-lead">생년월일·투자금·건강 정보를 입력하면 솔솔계산소 캐릭터가 결과와 근거를 바로 보여드려요.</p>
         <form class="hero-search" action="/calculators/" method="get" role="search">
